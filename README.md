@@ -1,6 +1,6 @@
 # Бот Telegram
 
-Принимает сообщения Telegram и передаёт их в Chat API (репозиторий `dating-bot`).
+Принимает сообщения Telegram и передаёт их в Dating API (репозиторий `dating-api`).
 Очередь и пары живут в Chat API. Бот ходит по HTTPS `https://api.chatwithyou.site`
 через Cloudflare Access и получает события по WebSocket `/api/v1/events/tg`.
 
