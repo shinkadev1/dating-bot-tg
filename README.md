@@ -13,9 +13,7 @@ Push в `master` собирает образ `dating-tg-bot` и перезапу
 Секреты GitHub:
 
 - `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`
-- `TELEGRAM_BOT_TOKEN` — токен @BotFather
-- `CHAT_API_TG_TOKEN` — тот же токен, что принимает Chat API для пользователей tg
-- `CF_ACCESS_CLIENT_ID`, `CF_ACCESS_CLIENT_SECRET` — сервисный токен Cloudflare Access
+- `ENV_FILE` — блок из `.env.example`: токен @BotFather, токен Chat API и сервисный токен Cloudflare Access
 - `TG_DEPLOY_HOST`, `TG_DEPLOY_USER`, `TG_DEPLOY_SSH_KEY` — SSH на сервер chat-engine
 - `TG_DEPLOY_PATH` — каталог бота, по умолчанию `~/dating-bot-tg`
 

@@ -68,13 +68,10 @@ jobs:
           TG_DEPLOY_HOST: ${{ secrets.TG_DEPLOY_HOST }}
           TG_DEPLOY_USER: ${{ secrets.TG_DEPLOY_USER }}
           TG_DEPLOY_SSH_KEY: ${{ secrets.TG_DEPLOY_SSH_KEY }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          CHAT_API_TG_TOKEN: ${{ secrets.CHAT_API_TG_TOKEN }}
-          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
-          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+          ENV_FILE: ${{ secrets.ENV_FILE }}
         run: |
           missing=0
-          for name in TG_DEPLOY_HOST TG_DEPLOY_USER TG_DEPLOY_SSH_KEY TELEGRAM_BOT_TOKEN CHAT_API_TG_TOKEN CF_ACCESS_CLIENT_ID CF_ACCESS_CLIENT_SECRET; do
+          for name in TG_DEPLOY_HOST TG_DEPLOY_USER TG_DEPLOY_SSH_KEY ENV_FILE; do
             eval "value=\${$name}"
             if [ -z "$value" ]; then
               echo "Добавьте секрет $name"
@@ -83,24 +80,30 @@ jobs:
           done
           test "$missing" -eq 0
 
+      - name: Encode env file
+        id: envfile
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: |
+          b64=$(printf '%s' "$ENV_FILE" | base64 -w 0)
+          echo "::add-mask::$b64"
+          echo "b64=$b64" >> "$GITHUB_OUTPUT"
+
       - name: Update Telegram bot
         uses: appleboy/ssh-action@v1.2.2
         env:
           TG_DEPLOY_PATH: ${{ secrets.TG_DEPLOY_PATH }}
+          ENV_FILE_B64: ${{ steps.envfile.outputs.b64 }}
           GIT_SHA: ${{ github.sha }}
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          CHAT_API_TG_TOKEN: ${{ secrets.CHAT_API_TG_TOKEN }}
-          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
-          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         with:
           host: ${{ secrets.TG_DEPLOY_HOST }}
           username: ${{ secrets.TG_DEPLOY_USER }}
           key: ${{ secrets.TG_DEPLOY_SSH_KEY }}
           port: ${{ secrets.TG_DEPLOY_PORT || 22 }}
           command_timeout: 15m
-          envs: TG_DEPLOY_PATH,GIT_SHA,DOCKERHUB_USERNAME,DOCKERHUB_TOKEN,TELEGRAM_BOT_TOKEN,CHAT_API_TG_TOKEN,CF_ACCESS_CLIENT_ID,CF_ACCESS_CLIENT_SECRET
+          envs: TG_DEPLOY_PATH,ENV_FILE_B64,GIT_SHA,DOCKERHUB_USERNAME,DOCKERHUB_TOKEN
           script: |
             set -eu
             APP_DIR="${TG_DEPLOY_PATH:-${HOME}/dating-bot-tg}"
