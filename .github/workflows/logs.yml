@@ -1,0 +1,22 @@
+name: Media logs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  logs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read media errors
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.TG_DEPLOY_HOST }}
+          username: ${{ secrets.TG_DEPLOY_USER }}
+          key: ${{ secrets.TG_DEPLOY_SSH_KEY }}
+          port: ${{ secrets.TG_DEPLOY_PORT || 22 }}
+          command_timeout: 5m
+          script: |
+            set -eu
+            docker ps -a --filter name=dating-tg-bot --format 'table {{.Names}}\t{{.Status}}'
+            echo '--- MEDIA ---'
+            docker logs dating-tg-bot --since 24h 2>&1 | grep -E "Не сохранил|Медиа |больше предела|Пустое или|HTTP |file is too big|TelegramBadRequest|Bad Request|Traceback" || true

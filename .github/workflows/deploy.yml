@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths-ignore:
       - .github/workflows/deploy.yml
+      - .github/workflows/logs.yml
 
 concurrency:
   group: deploy-tg-bot
