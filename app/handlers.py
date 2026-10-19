@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from collections.abc import Awaitable, Callable
 
 from aiogram import F, Router
 from aiogram.enums import ChatType
@@ -11,12 +12,14 @@ from aiogram.types import Message
 
 from app.api_client import ChatApiError, NotChattingError, chat_api
 from app.gateway import gateway
+from app.media import store_tg_media
 from app.peer import Peer
 from app.ui import (
     CHAT_BTN_NEXT,
     CHAT_BTN_STOP,
     FOUND_TEXT,
     GREETING,
+    MEDIA_FAILED_TEXT,
     NEW_PARTNER_BTN,
     NO_PARTNERS_TEXT,
     PARTNER_LEFT_TEXT,
@@ -71,22 +74,38 @@ async def handle_next(peer: Peer, command: str, searching: bool) -> bool:
     return True
 
 
-async def handle_chat_line(peer: Peer, text: str, chatting: bool) -> bool:
-    """Пересылает текст собеседнику."""
+async def handle_chat_line(
+    peer: Peer,
+    text: str,
+    chatting: bool,
+    uploader: Callable[[], Awaitable[str]] | None = None,
+) -> bool:
+    """Пересылает текст. Медиа сначала сохраняет в S3 и собеседнику не отправляет."""
     if not chatting:
         return False
-    if not text:
-        return True
-    try:
-        delivered = (await chat_api.send_message(peer, text)).delivered
-    except NotChattingError:
-        delivered = False
-    if not delivered:
+    media_state = await uploader() if uploader is not None else "none"
+    if media_state == "left":
         await gateway.send(peer, PARTNER_LEFT_TEXT, "partner_left")
+        return True
+    if text:
+        try:
+            delivered = (await chat_api.send_message(peer, text)).delivered
+        except NotChattingError:
+            delivered = False
+        if not delivered:
+            await gateway.send(peer, PARTNER_LEFT_TEXT, "partner_left")
+            return True
+    if media_state == "failed":
+        await gateway.send(peer, MEDIA_FAILED_TEXT, "chat")
     return True
 
 
-async def handle_incoming(peer: Peer, text: str, handle: str | None = None) -> None:
+async def handle_incoming(
+    peer: Peer,
+    text: str,
+    handle: str | None = None,
+    uploader: Callable[[], Awaitable[str]] | None = None,
+) -> None:
     """Маршрутизирует сообщение: старт, затем меню или диалог."""
     try:
         await chat_api.visit(peer, handle)
@@ -105,7 +124,7 @@ async def handle_incoming(peer: Peer, text: str, handle: str | None = None) -> N
             return
         if await handle_next(peer, command, phase == "searching"):
             return
-        if await handle_chat_line(peer, text, phase == "chatting"):
+        if await handle_chat_line(peer, text, phase == "chatting", uploader):
             return
         if phase == "searching":
             await gateway.send(peer, SEARCHING_TEXT, "chat")
@@ -123,8 +142,15 @@ async def on_message(message: Message) -> None:
     peer = Peer(str(message.bot.id), message.from_user.id)
     username = (message.from_user.username or "").strip()
     handle = f"@{username}" if username else None
+    text = (message.text or message.caption or "").strip()
+    uploader = None
+    if message.photo or message.video or message.video_note or message.voice:
+
+        async def uploader() -> str:
+            return await store_tg_media(message, peer)
+
     try:
-        await handle_incoming(peer, (message.text or "").strip(), handle)
+        await handle_incoming(peer, text, handle, uploader)
     except Exception:  # ошибка одного сообщения не должна ронять polling
         logger.exception("Ошибка ответа %s", peer)
 
