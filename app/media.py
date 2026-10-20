@@ -7,7 +7,7 @@ from io import BytesIO
 
 from aiogram.types import Message
 
-from app.api_client import NotChattingError, chat_api
+from app.api_client import NotChattingError, NotPremiumError, chat_api
 from app.peer import Peer
 
 logger = logging.getLogger(__name__)
@@ -53,6 +53,9 @@ async def store_tg_media(message: Message, peer: Peer) -> str:
         key = await chat_api.store_media(peer, kind, data)
     except NotChattingError:
         return "left"
+    except NotPremiumError:
+        logger.info("Медиа только у премиума %s", peer)
+        return "premium"
     except Exception:
         logger.exception("Не сохранил %s %s", kind, peer)
         return "failed"
