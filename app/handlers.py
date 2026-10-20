@@ -20,6 +20,7 @@ from app.ui import (
     FOUND_TEXT,
     GREETING,
     MEDIA_FAILED_TEXT,
+    MEDIA_PREMIUM_TEXT,
     NEW_PARTNER_BTN,
     NO_PARTNERS_TEXT,
     PARTNER_LEFT_TEXT,
@@ -95,7 +96,9 @@ async def handle_chat_line(
         if not delivered:
             await gateway.send(peer, PARTNER_LEFT_TEXT, "partner_left")
             return True
-    if media_state == "failed":
+    if media_state == "premium":
+        await gateway.send(peer, MEDIA_PREMIUM_TEXT, "chat")
+    elif media_state == "failed":
         await gateway.send(peer, MEDIA_FAILED_TEXT, "chat")
     return True
 

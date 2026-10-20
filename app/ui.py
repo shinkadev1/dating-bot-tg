@@ -25,6 +25,10 @@ REPORT_SENT_TEXT = "Жалоба отправлена. Спасибо, что с
 UNDELIVERED_TEXT = "❌ Собеседник недоступен, диалог закончен.\nНажми «Начать», чтобы найти нового собеседника."
 SERVICE_DOWN_TEXT = "Сервис временно недоступен. Попробуй через минуту."
 MEDIA_FAILED_TEXT = "Не получилось сохранить медиа. Отправь ещё раз."
+MEDIA_PREMIUM_TEXT = (
+    "Чтобы отправлять медиа, получите премиум:\n"
+    "https://t.me/iskradatinganon"
+)
 
 
 def _button(text: str, *, style: str | None = None) -> KeyboardButton:
