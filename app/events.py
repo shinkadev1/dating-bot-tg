@@ -79,7 +79,21 @@ async def _deliver_notice(body: dict) -> None:
         return
     peer = Peer(str(to["bot_key"]), int(to["user_id"]))
     await asyncio.sleep(_NOTICE_INTERVAL)
-    await gateway.send(peer, text, "notice")
+    await gateway.send_notice(peer, text, photo=await _notice_photo(body))
+
+
+async def _notice_photo(body: dict) -> bytes | None:
+    media_id = str(body.get("media_id") or "")
+    if not media_id:
+        return None
+    try:
+        data, _content_type, kind = await chat_api.fetch_media(media_id)
+    except ChatApiError:
+        logger.exception("Не скачал фото уведомления %s", media_id)
+        return None
+    if kind != "photo" or not data:
+        return None
+    return data
 
 
 async def _handle_notice(event: dict) -> None:

@@ -58,6 +58,47 @@ class Gateway:
         logger.warning("Telegram ограничил отправку tg:%s, сообщение пропущено", peer.user_id)
         return True
 
+    async def send_notice(self, peer: Peer, text: str, *, photo: bytes | None) -> None:
+        """Текст рассылки и, если есть, фото. Клавиатуру диалога не меняет."""
+        if self._bot is None:
+            raise RuntimeError("Бот Telegram ещё не запущен")
+        if photo:
+            caption = text if len(text) <= 1024 else None
+            try:
+                await self._send_notice_photo(peer.user_id, photo, caption)
+                if caption is None:
+                    await self.send(peer, text, "notice")
+                return
+            except TelegramRetryAfter as exc:
+                await asyncio.sleep(exc.retry_after)
+                try:
+                    await self._send_notice_photo(peer.user_id, photo, caption)
+                    if caption is None:
+                        await self.send(peer, text, "notice")
+                    return
+                except (TelegramForbiddenError, TelegramBadRequest) as retry_exc:
+                    if _tg_gone(retry_exc):
+                        return
+                except TelegramRetryAfter:
+                    logger.warning("Telegram ограничил уведомление tg:%s", peer.user_id)
+                    return
+            except (TelegramForbiddenError, TelegramBadRequest) as exc:
+                if _tg_gone(exc):
+                    logger.info("Пользователь tg:%s недоступен: %s", peer.user_id, exc)
+                    return
+                logger.warning("Не отправил фото уведомления tg:%s: %s", peer.user_id, exc)
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("Не отправил фото уведомления tg:%s: %s: %s", peer.user_id, type(exc).__name__, exc)
+        await self.send(peer, text, "notice")
+
+    async def _send_notice_photo(self, user_id: int, photo: bytes, caption: str | None) -> None:
+        assert self._bot is not None
+        await self._bot.send_photo(
+            user_id,
+            BufferedInputFile(photo, filename="photo.jpg"),
+            caption=caption,
+        )
+
     async def send_media(self, peer: Peer, kind: str, content_type: str, data: bytes) -> bool:
         """Кладёт файл в диалог. False — человек недоступен.
 
