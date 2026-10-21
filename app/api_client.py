@@ -85,25 +85,58 @@ class ChatApiClient:
         body = await self._request("POST", peer, "messages", {"text": text})
         return SendResult(delivered=body["delivered"], phase=body["phase"])
 
-    async def store_media(self, peer: Peer, kind: str, data: bytes) -> str:
-        """Кладёт байты в Chat API. Возвращает ключ объекта в S3."""
+    async def store_media(
+        self,
+        peer: Peer,
+        kind: str,
+        data: bytes,
+        *,
+        tg_file_id: str | None = None,
+        tg_method: str | None = None,
+    ) -> str:
+        """Кладёт байты в Chat API. Возвращает ключ объекта в S3.
+
+        tg_file_id — исходный файл Telegram: собеседнику в Telegram он уходит без повторной загрузки.
+        """
         path = f"/peers/{peer.platform}/{peer.bot_key}/{peer.user_id}/media"
+        form = {"kind": kind}
+        if tg_file_id:
+            form["tg_file_id"] = tg_file_id
+        if tg_method:
+            form["tg_method"] = tg_method
         try:
             response = await self._http.post(
                 path,
-                data={"kind": kind},
+                data=form,
                 files={"file": ("upload.bin", data, "application/octet-stream")},
                 timeout=180,
             )
         except httpx.HTTPError as exc:
             raise ChatApiError(f"POST {path}: {type(exc).__name__}: {exc}") from exc
+        self._raise_media(path, response)
+        return str(response.json()["key"])
+
+    async def relay_tg_file(self, peer: Peer, kind: str, tg_file_id: str, tg_method: str) -> None:
+        """Передаёт file_id без байтов. Нужно, когда Bot API не отдаёт файл больше 20 МБ."""
+        path = f"/peers/{peer.platform}/{peer.bot_key}/{peer.user_id}/media"
+        try:
+            response = await self._http.post(
+                path,
+                data={"kind": kind, "tg_file_id": tg_file_id, "tg_method": tg_method},
+                timeout=30,
+            )
+        except httpx.HTTPError as exc:
+            raise ChatApiError(f"POST {path}: {type(exc).__name__}: {exc}") from exc
+        self._raise_media(path, response)
+
+    @staticmethod
+    def _raise_media(path: str, response: httpx.Response) -> None:
         if response.status_code == httpx.codes.CONFLICT:
             raise NotChattingError(response.text)
         if response.status_code == httpx.codes.FORBIDDEN and "премиум" in response.text.casefold():
             raise NotPremiumError(response.text)
         if response.is_error:
             raise ChatApiError(f"POST {path}: HTTP {response.status_code} {response.text}")
-        return str(response.json()["key"])
 
     async def fetch_media(self, media_id: str) -> tuple[bytes, str, str]:
         """Байты, MIME и вид файла, который Chat API поставил в очередь этому боту."""

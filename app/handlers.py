@@ -12,7 +12,7 @@ from aiogram.types import Message
 
 from app.api_client import ChatApiError, NotChattingError, chat_api
 from app.gateway import gateway
-from app.media import store_tg_media
+from app.media import has_tg_media, store_tg_media
 from app.peer import Peer
 from app.ui import (
     CHAT_BTN_NEXT,
@@ -81,7 +81,7 @@ async def handle_chat_line(
     chatting: bool,
     uploader: Callable[[], Awaitable[str]] | None = None,
 ) -> bool:
-    """Пересылает текст. Медиа уходит собеседнику, если у отправителя есть премиум."""
+    """Пересылает текст и медиа собеседнику."""
     if not chatting:
         return False
     media_state = await uploader() if uploader is not None else "none"
@@ -147,7 +147,7 @@ async def on_message(message: Message) -> None:
     handle = f"@{username}" if username else None
     text = (message.text or message.caption or "").strip()
     uploader = None
-    if message.photo or message.video or message.video_note or message.voice:
+    if has_tg_media(message):
 
         async def uploader() -> str:
             return await store_tg_media(message, peer)

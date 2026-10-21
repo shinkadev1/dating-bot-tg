@@ -17,6 +17,11 @@ logger = logging.getLogger(__name__)
 
 Keyboard = Literal["main", "chat", "partner_left", "notice"]
 _MAX_TEXT_LENGTH = 4096
+_TG_METHODS = {"photo", "audio", "voice", "video", "video_note"}
+
+
+class NeedBytes(Exception):
+    """file_id Telegram не принят, нужно отправить сохранённые байты."""
 
 
 class Gateway:
@@ -99,21 +104,36 @@ class Gateway:
             caption=caption,
         )
 
-    async def send_media(self, peer: Peer, kind: str, content_type: str, data: bytes) -> bool:
+    async def send_media(
+        self,
+        peer: Peer,
+        kind: str,
+        content_type: str,
+        data: bytes,
+        *,
+        tg_file_id: str | None = None,
+        tg_method: str | None = None,
+    ) -> bool:
         """Кладёт файл в диалог. False — человек недоступен.
 
-        Кружок, который Telegram не принял, уходит обычным видео. Сбой файла диалог не закрывает.
+        Свой файл Telegram уходит по file_id: кружок остаётся кружком, голосовое — голосовым.
+        Чужой файл уходит байтами. Сбой файла диалог не закрывает.
         """
         if self._bot is None:
             raise RuntimeError("Бот Telegram ещё не запущен")
+        method = tg_method if tg_method in _TG_METHODS else _method_from_kind(kind, content_type)
         try:
-            await self._send_file(peer.user_id, kind, data, content_type)
+            await self._deliver_file(peer.user_id, method, data, content_type, tg_file_id)
             return True
+        except NeedBytes:
+            raise
         except TelegramRetryAfter as exc:
             await asyncio.sleep(exc.retry_after)
             try:
-                await self._send_file(peer.user_id, kind, data, content_type)
+                await self._deliver_file(peer.user_id, method, data, content_type, tg_file_id)
                 return True
+            except NeedBytes:
+                raise
             except TelegramRetryAfter:
                 logger.warning("Telegram ограничил медиа tg:%s", peer.user_id)
                 return True
@@ -129,26 +149,94 @@ class Gateway:
             logger.warning("Не отправил медиа tg:%s: %s: %s", peer.user_id, type(exc).__name__, exc)
             return True
 
-    async def _send_file(self, user_id: int, kind: str, data: bytes, content_type: str) -> None:
-        assert self._bot is not None
-        name = _filename(kind, content_type)
-        file = BufferedInputFile(data, filename=name)
-        if kind == "photo":
-            await self._bot.send_photo(user_id, file, reply_markup=CHAT_KEYBOARD)
-            return
-        if kind == "voice":
-            if content_type == "audio/ogg":
-                await self._bot.send_voice(user_id, file, reply_markup=CHAT_KEYBOARD)
-            else:
-                await self._bot.send_audio(user_id, file, reply_markup=CHAT_KEYBOARD)
-            return
-        if kind == "video_note":
+    async def _deliver_file(
+        self,
+        user_id: int,
+        method: str,
+        data: bytes,
+        content_type: str,
+        tg_file_id: str | None,
+    ) -> None:
+        if tg_file_id:
             try:
-                await self._bot.send_video_note(user_id, file, reply_markup=CHAT_KEYBOARD)
+                await self._send_ref(user_id, method, tg_file_id)
                 return
-            except TelegramBadRequest:
-                file = BufferedInputFile(data, filename=name)
-        await self._bot.send_video(user_id, file, reply_markup=CHAT_KEYBOARD)
+            except TelegramBadRequest as exc:
+                if _tg_gone(exc):
+                    raise
+                logger.warning("Telegram не принял file_id %s: %s", method, exc)
+        if not data:
+            raise NeedBytes
+        await self._send_file(user_id, method, data, content_type)
+
+    async def _send_ref(self, user_id: int, method: str, file_id: str) -> None:
+        assert self._bot is not None
+        bot = self._bot
+        attempts: list = []
+        if method == "photo":
+            attempts.append(lambda: bot.send_photo(user_id, file_id, reply_markup=CHAT_KEYBOARD))
+        elif method == "voice":
+            attempts.append(lambda: bot.send_voice(user_id, file_id, reply_markup=CHAT_KEYBOARD))
+            attempts.append(lambda: bot.send_audio(user_id, file_id, reply_markup=CHAT_KEYBOARD))
+        elif method == "audio":
+            attempts.append(lambda: bot.send_audio(user_id, file_id, reply_markup=CHAT_KEYBOARD))
+        elif method == "video_note":
+            attempts.append(lambda: bot.send_video_note(user_id, file_id, reply_markup=CHAT_KEYBOARD))
+            attempts.append(lambda: bot.send_video_note(user_id, file_id))
+            attempts.append(lambda: bot.send_video(user_id, file_id, reply_markup=CHAT_KEYBOARD))
+        else:
+            attempts.append(lambda: bot.send_video(user_id, file_id, reply_markup=CHAT_KEYBOARD))
+        attempts.append(lambda: bot.send_document(user_id, file_id, reply_markup=CHAT_KEYBOARD))
+        await _try_sends(attempts)
+
+    async def _send_file(self, user_id: int, method: str, data: bytes, content_type: str) -> None:
+        assert self._bot is not None
+        bot = self._bot
+        name = _filename(method, content_type)
+
+        def uploaded() -> BufferedInputFile:
+            return BufferedInputFile(data, filename=name)
+
+        attempts: list = []
+        if method == "photo":
+            attempts.append(lambda: bot.send_photo(user_id, uploaded(), reply_markup=CHAT_KEYBOARD))
+        elif method == "voice":
+            if content_type == "audio/ogg":
+                attempts.append(lambda: bot.send_voice(user_id, uploaded(), reply_markup=CHAT_KEYBOARD))
+            attempts.append(lambda: bot.send_audio(user_id, uploaded(), reply_markup=CHAT_KEYBOARD))
+        elif method == "audio":
+            attempts.append(lambda: bot.send_audio(user_id, uploaded(), reply_markup=CHAT_KEYBOARD))
+        elif method == "video_note":
+            attempts.append(lambda: bot.send_video_note(user_id, uploaded(), reply_markup=CHAT_KEYBOARD))
+            attempts.append(lambda: bot.send_video_note(user_id, uploaded()))
+            attempts.append(lambda: bot.send_video(user_id, uploaded(), reply_markup=CHAT_KEYBOARD))
+        else:
+            attempts.append(lambda: bot.send_video(user_id, uploaded(), reply_markup=CHAT_KEYBOARD))
+        attempts.append(lambda: bot.send_document(user_id, uploaded(), reply_markup=CHAT_KEYBOARD))
+        await _try_sends(attempts)
+
+
+def _method_from_kind(kind: str, content_type: str) -> str:
+    """Файл пришёл не из Telegram: голосовое ogg остаётся голосовым, остальное аудио — песней."""
+    if kind == "voice" and content_type != "audio/ogg":
+        return "audio"
+    if kind in _TG_METHODS:
+        return kind
+    return "video"
+
+
+async def _try_sends(attempts: list) -> None:
+    last: TelegramBadRequest | None = None
+    for send in attempts:
+        try:
+            await send()
+            return
+        except TelegramBadRequest as exc:
+            if _tg_gone(exc):
+                raise
+            last = exc
+    if last is not None:
+        raise last
 
 
 def _tg_gone(exc: BaseException) -> bool:
@@ -170,6 +258,8 @@ def _filename(kind: str, content_type: str) -> str:
         "audio/ogg": "ogg",
         "audio/mpeg": "mp3",
         "audio/mp4": "m4a",
+        "audio/wav": "wav",
+        "audio/webm": "webm",
     }.get(content_type, "bin")
     return f"{kind}.{ext}"
 

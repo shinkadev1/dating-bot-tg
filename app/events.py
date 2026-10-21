@@ -11,7 +11,7 @@ from websockets.asyncio.client import connect
 
 from app.api_client import ChatApiError, chat_api
 from app.config import CHAT_API_URL, EVENTS_CONSUMER, chat_api_headers
-from app.gateway import gateway
+from app.gateway import NeedBytes, gateway
 from app.handlers import cancel_search_timeout
 from app.peer import Peer
 from app.ui import FOUND_TEXT, PARTNER_LEFT_TEXT, UNDELIVERED_TEXT, format_partner
@@ -35,15 +35,31 @@ async def _deliver(body: dict) -> None:
         delivered = await gateway.send(peer, format_partner(str(body.get("text") or "")), "chat")
     elif kind == "media":
         media_id = str(body.get("media_id") or "")
-        if not media_id:
+        tg_file_id = str(body.get("tg_file_id") or "")
+        if not media_id and not tg_file_id:
             logger.warning("Событие media без файла для %s", peer)
             return
+        file_kind = str(body.get("kind") or "")
+        content_type = str(body.get("content_type") or "")
         try:
-            data, content_type, file_kind = await chat_api.fetch_media(media_id)
-        except ChatApiError as exc:
-            logger.warning("Не скачал медиа %s для %s: %s", media_id, peer, exc)
-            return
-        delivered = await gateway.send_media(peer, file_kind, content_type, data)
+            delivered = await gateway.send_media(
+                peer,
+                file_kind,
+                content_type,
+                b"",
+                tg_file_id=tg_file_id or None,
+                tg_method=str(body.get("tg_method") or "") or None,
+            )
+        except NeedBytes:
+            if not media_id:
+                logger.warning("Telegram не принял файл без байтов для %s", peer)
+                return
+            try:
+                data, content_type, file_kind = await chat_api.fetch_media(media_id)
+            except ChatApiError as exc:
+                logger.warning("Не скачал медиа %s для %s: %s", media_id, peer, exc)
+                return
+            delivered = await gateway.send_media(peer, file_kind, content_type, data)
     elif kind == "partner_left":
         cancel_search_timeout(peer)
         if body.get("reason") == "undeliverable":
