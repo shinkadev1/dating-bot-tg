@@ -4,20 +4,54 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from pathlib import Path
 from typing import Literal
 
 from aiogram import Bot
 from aiogram.exceptions import TelegramBadRequest, TelegramForbiddenError, TelegramRetryAfter
-from aiogram.types import BufferedInputFile
+from aiogram.types import BufferedInputFile, InlineKeyboardMarkup, ReplyKeyboardMarkup
 
 from app.peer import Peer
-from app.ui import CHAT_KEYBOARD, IDLE_KEYBOARD, PARTNER_LEFT_KEYBOARD
+from app.ui import (
+    CHAT_KEYBOARD,
+    DATING_KEYBOARD,
+    GREETING,
+    IDLE_KEYBOARD,
+    PARTNER_LEFT_KEYBOARD,
+    PREMIUM_KEYBOARD,
+    PREMIUM_STATUS_TEXT,
+    ROOMS_TEXT,
+    SETTINGS_TEXT,
+    build_rooms_keyboard,
+    build_settings_keyboard,
+)
 
 logger = logging.getLogger(__name__)
 
-Keyboard = Literal["main", "chat", "partner_left", "notice"]
+Keyboard = Literal["main", "chat", "partner_left", "notice", "dating"]
 _MAX_TEXT_LENGTH = 4096
 _TG_METHODS = {"photo", "audio", "voice", "video", "video_note"}
+_KEYBOARDS: dict[str, ReplyKeyboardMarkup | None] = {
+    "main": IDLE_KEYBOARD,
+    "chat": CHAT_KEYBOARD,
+    "partner_left": PARTNER_LEFT_KEYBOARD,
+    "dating": DATING_KEYBOARD,
+    "notice": None,
+}
+
+_ASSETS = Path(__file__).resolve().parent / "assets"
+_ASSETS_CACHE: dict[str, bytes] = {}
+
+
+def _asset(name: str) -> bytes | None:
+    """Картинка из `app/assets`. Файла нет — None: текст важнее баннера."""
+    if name not in _ASSETS_CACHE:
+        try:
+            _ASSETS_CACHE[name] = (_ASSETS / name).read_bytes()
+        except OSError as exc:
+            logger.warning("Нет картинки %s: %s", name, exc)
+            _ASSETS_CACHE[name] = b""
+    return _ASSETS_CACHE[name] or None
 
 
 class NeedBytes(Exception):
@@ -36,16 +70,17 @@ class Gateway:
 
         Временные сбои Telegram считаются доставкой, чтобы не обрывать диалог из-за сети.
         """
+        return await self._send_text(peer, text, _KEYBOARDS.get(keyboard))
+
+    async def _send_text(
+        self,
+        peer: Peer,
+        text: str,
+        markup: ReplyKeyboardMarkup | InlineKeyboardMarkup | None,
+    ) -> bool:
+        """Текст с клавиатурой или без неё. False — человек недоступен."""
         if self._bot is None:
             raise RuntimeError("Бот Telegram ещё не запущен")
-        if keyboard == "notice":
-            markup = None
-        elif keyboard == "chat":
-            markup = CHAT_KEYBOARD
-        elif keyboard == "partner_left":
-            markup = PARTNER_LEFT_KEYBOARD
-        else:
-            markup = IDLE_KEYBOARD
         for attempt in range(2):
             try:
                 await self._bot.send_message(peer.user_id, text[:_MAX_TEXT_LENGTH], reply_markup=markup)
@@ -62,6 +97,66 @@ class Gateway:
                 return True
         logger.warning("Telegram ограничил отправку tg:%s, сообщение пропущено", peer.user_id)
         return True
+
+    async def send_greeting(self, peer: Peer) -> bool:
+        """Приветствие с баннером, текстом и нижней клавиатурой одним сообщением."""
+        sent = await self._send_photo(peer, "greeting.jpg", GREETING, IDLE_KEYBOARD)
+        if sent is not None:
+            return sent
+        return await self.send(peer, GREETING, "main")
+
+    async def send_premium(self, peer: Peer) -> bool:
+        """Промо премиума: картинка акции, список возможностей и кнопка оплаты."""
+        sent = await self._send_photo(peer, "premium.png", PREMIUM_STATUS_TEXT, PREMIUM_KEYBOARD)
+        if sent is not None:
+            return sent
+        return await self._send_text(peer, PREMIUM_STATUS_TEXT, PREMIUM_KEYBOARD)
+
+    async def send_rooms(self, peer: Peer, selected: str) -> bool:
+        """Текст выбора комнаты и inline-клавиатура с отмеченной комнатой."""
+        return await self._send_text(peer, ROOMS_TEXT, build_rooms_keyboard(selected))
+
+    async def send_settings(self, peer: Peer, selected: str) -> bool:
+        """Текст настроек поиска и inline-клавиатура выбора пола."""
+        return await self._send_text(peer, SETTINGS_TEXT, build_settings_keyboard(selected))
+
+    async def _send_photo(
+        self,
+        peer: Peer,
+        name: str,
+        caption: str,
+        markup: ReplyKeyboardMarkup | InlineKeyboardMarkup,
+    ) -> bool | None:
+        """Фото с подписью и кнопками. None — фото не ушло, нужен текстовый фолбэк."""
+        photo = _asset(name)
+        if photo is None:
+            return None
+        if self._bot is None:
+            raise RuntimeError("Бот Telegram ещё не запущен")
+        for attempt in range(2):
+            try:
+                await self._bot.send_photo(
+                    peer.user_id,
+                    BufferedInputFile(photo, filename=name),
+                    caption=caption[:1024],
+                    reply_markup=markup,
+                )
+                return True
+            except TelegramRetryAfter as exc:
+                if attempt:
+                    break
+                await asyncio.sleep(exc.retry_after)
+            except (TelegramForbiddenError, TelegramBadRequest) as exc:
+                if _tg_gone(exc):
+                    logger.info("Пользователь tg:%s недоступен: %s", peer.user_id, exc)
+                    return False
+                logger.warning("Не отправил фото tg:%s: %s", peer.user_id, exc)
+                return None
+            except Exception as exc:  # noqa: BLE001 — текст уйдёт без баннера
+                logger.warning("Не отправил фото tg:%s: %s: %s", peer.user_id, type(exc).__name__, exc)
+                return None
+        logger.warning("Telegram ограничил отправку фото tg:%s", peer.user_id)
+        return None
 
     async def send_notice(self, peer: Peer, text: str, *, photo: bytes | None) -> None:
         """Текст рассылки и, если есть, фото. Клавиатуру диалога не меняет."""
