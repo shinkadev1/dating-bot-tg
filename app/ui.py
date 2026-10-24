@@ -42,7 +42,7 @@ UNDELIVERED_TEXT = "❌ Собеседник недоступен, диалог 
 SERVICE_DOWN_TEXT = "Сервис временно недоступен. Попробуй через минуту."
 MEDIA_FAILED_TEXT = "Не получилось сохранить медиа. Отправь ещё раз."
 
-PREMIUM_URL = "https://t.me/iskradatinganon"
+PREMIUM_URL = "https://clck.su/cDapp"
 MEDIA_PREMIUM_TEXT = f"Чтобы отправлять медиа, получите премиум:\n{PREMIUM_URL}"
 PREMIUM_STATUS_TEXT = (
     "⚡ Временная акция, скидка 99%:\n\n"
