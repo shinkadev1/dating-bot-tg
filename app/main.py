@@ -10,7 +10,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
 
 from app.api_client import ChatApiError, chat_api
-from app.config import CHAT_API_TG_TOKEN, CHAT_API_URL, TELEGRAM_BOT_TOKEN
+from app.config import CHAT_API_TG_TOKEN, CHAT_API_URL, DEV, TELEGRAM_BOT_TOKEN
 from app.events import consume_broadcasts, consume_events
 from app.gateway import gateway
 from app.handlers import router
@@ -24,13 +24,20 @@ _COMMANDS = [
     BotCommand(command="next", description="Следующий собеседник"),
     BotCommand(command="stop", description="Закончить диалог"),
 ]
+if DEV:
+    _COMMANDS += [
+        BotCommand(command="dev_leave", description="DEV: собеседник уходит"),
+        BotCommand(command="dev_notice", description="DEV: тестовая рассылка"),
+    ]
 
 
 async def _run() -> None:
     if not TELEGRAM_BOT_TOKEN:
         raise SystemExit("Не задан TELEGRAM_BOT_TOKEN.")
-    if not CHAT_API_TG_TOKEN:
+    if not CHAT_API_TG_TOKEN and not DEV:
         raise SystemExit("Не задан CHAT_API_TG_TOKEN: без него Chat API не примет запросы бота.")
+    if DEV:
+        logger.warning("DEV=true: Chat API замокан, очередь и события живут в памяти процесса")
 
     bot = Bot(TELEGRAM_BOT_TOKEN)
     events: asyncio.Task[None] | None = None
@@ -50,7 +57,12 @@ async def _run() -> None:
 
         events = asyncio.create_task(consume_events(), name="chat-events")
         broadcasts = asyncio.create_task(consume_broadcasts(), name="chat-broadcasts")
-        logger.info("Бот @%s (id=%s), Chat API %s", me.username, me.id, CHAT_API_URL)
+        logger.info(
+            "Бот @%s (id=%s), Chat API %s",
+            me.username,
+            me.id,
+            "заглушка (DEV)" if DEV else CHAT_API_URL,
+        )
         await dispatcher.start_polling(bot, allowed_updates=dispatcher.resolve_used_update_types())
     finally:
         for task in (events, broadcasts):

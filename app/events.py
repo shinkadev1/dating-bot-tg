@@ -5,14 +5,17 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+from collections.abc import Awaitable, Callable
+from typing import cast
 from urllib.parse import quote
 
 from websockets.asyncio.client import connect
 
 from app.api_client import ChatApiError, chat_api
-from app.config import CHAT_API_URL, EVENTS_CONSUMER, chat_api_headers
+from app.config import CHAT_API_URL, DEV, EVENTS_CONSUMER, chat_api_headers
 from app.gateway import NeedBytes, gateway
 from app.handlers import cancel_search_timeout
+from app.mock_api import MockChatApi
 from app.peer import Peer
 from app.ui import FOUND_TEXT, PARTNER_LEFT_TEXT, UNDELIVERED_TEXT, format_partner
 
@@ -143,9 +146,23 @@ async def _listen(path: str, handler) -> None:
         await asyncio.sleep(_RECONNECT_DELAY_SECONDS)
 
 
+async def _consume_local(queue: asyncio.Queue[dict], handler: Callable[[dict], Awaitable[None]]) -> None:
+    """DEV: события берутся из очереди заглушки, подтверждать нечего."""
+    logger.info("DEV: события Chat API читаются из заглушки")
+    while True:
+        event = await queue.get()
+        await handler(event)
+
+
 async def consume_events() -> None:
+    if DEV:
+        await _consume_local(cast(MockChatApi, chat_api).events, _handle)
+        return
     await _listen("/api/v1/events/tg", _handle)
 
 
 async def consume_broadcasts() -> None:
+    if DEV:
+        await _consume_local(cast(MockChatApi, chat_api).broadcasts, _handle_notice)
+        return
     await _listen("/api/v1/broadcasts/tg", _handle_notice)

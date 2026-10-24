@@ -2,31 +2,14 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Any
 
 import httpx
 
-from app.config import CHAT_API_URL, chat_api_headers
+from app.api_types import ChatApiError, NotChattingError, NotPremiumError, SendResult
+from app.config import CHAT_API_URL, DEV, chat_api_headers
+from app.mock_api import MockChatApi
 from app.peer import Peer
-
-
-class ChatApiError(Exception):
-    """API недоступен или ответил ошибкой."""
-
-
-class NotChattingError(ChatApiError):
-    """У пользователя уже нет активного диалога."""
-
-
-class NotPremiumError(ChatApiError):
-    """Медиа может отправить только пользователь с премиумом."""
-
-
-@dataclass(frozen=True)
-class SendResult:
-    delivered: bool
-    phase: str
 
 
 class ChatApiClient:
@@ -155,4 +138,20 @@ class ChatApiClient:
         await self._request("POST", peer, "delivery-failed")
 
 
-chat_api = ChatApiClient(CHAT_API_URL, chat_api_headers())
+chat_api: ChatApiClient | MockChatApi
+if DEV:
+    # Локальный запуск: REST и события Chat API не покидают процесс.
+    chat_api = MockChatApi()
+else:
+    chat_api = ChatApiClient(CHAT_API_URL, chat_api_headers())
+
+
+__all__ = [
+    "ChatApiClient",
+    "ChatApiError",
+    "MockChatApi",
+    "NotChattingError",
+    "NotPremiumError",
+    "SendResult",
+    "chat_api",
+]
