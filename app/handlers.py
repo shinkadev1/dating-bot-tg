@@ -228,7 +228,10 @@ async def handle_incoming(
         if route == "premium":
             await gateway.send_premium(peer)
             return
-        if route in {"find", "dating_find"}:
+        if route == "find":
+            await connect_with_partner(peer)
+            return
+        if route == "dating_find":
             await handle_dating_find(peer)
             return
         if route == "dating":
@@ -338,7 +341,7 @@ async def send_premium_gate(peer: Peer) -> None:
 
 
 async def handle_dating_find(peer: Peer) -> None:
-    """Кнопка «Найти собеседника»: без премиума поиск не начинается — текст и промо."""
+    """Кнопка «Найти девушку»: без премиума поиск не начинается — текст и промо."""
     await send_premium_gate(peer)
 
 
