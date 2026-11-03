@@ -63,6 +63,19 @@ def _over_limit(method: str, kind: str, size: object) -> bool:
     return size > _LIMITS["audio" if method == "audio" else kind]
 
 
+# Так Chat API объясняет 403, когда премиума нет у получателя, а не у автора.
+_PARTNER_NO_PREMIUM_MARK = "собеседник без премиума"
+
+
+def _premium_state(peer: Peer, exc: NotPremiumError) -> str:
+    """premium — премиум нужен автору, partner_premium — собеседнику."""
+    if _PARTNER_NO_PREMIUM_MARK in str(exc).casefold():
+        logger.info("Собеседник %s без премиума, медиа не принято", peer)
+        return "partner_premium"
+    logger.info("Медиа только у премиума %s", peer)
+    return "premium"
+
+
 async def store_tg_media(message: Message, peer: Peer) -> str:
     """Сохраняет вложение диалога. ok — ушло собеседнику, failed — не скачалось, left — диалог уже закрыт."""
     part = _part(message)
@@ -91,9 +104,8 @@ async def store_tg_media(message: Message, peer: Peer) -> str:
             key = await chat_api.store_media(peer, kind, data, tg_file_id=file_id, tg_method=method)
         except NotChattingError:
             return "left"
-        except NotPremiumError:
-            logger.info("Медиа только у премиума %s", peer)
-            return "premium"
+        except NotPremiumError as exc:
+            return _premium_state(peer, exc)
         except ChatApiError as exc:
             if file_id and ("HTTP 413" in str(exc) or "HTTP 415" in str(exc)):
                 logger.warning("Байты %s не приняты, отправляю file_id: %s", method, exc)
@@ -110,9 +122,8 @@ async def store_tg_media(message: Message, peer: Peer) -> str:
         await chat_api.relay_tg_file(peer, kind, file_id, method)
     except NotChattingError:
         return "left"
-    except NotPremiumError:
-        logger.info("Медиа только у премиума %s", peer)
-        return "premium"
+    except NotPremiumError as exc:
+        return _premium_state(peer, exc)
     except ChatApiError as exc:
         logger.warning("Не передал %s %s: %s", method, peer, exc)
         return "failed"

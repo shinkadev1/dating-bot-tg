@@ -189,8 +189,8 @@ async def handle_chat_line(
         if not delivered:
             await gateway.send(peer, PARTNER_LEFT_TEXT, "partner_left")
             return True
-    if media_state == "premium":
-        await send_media_premium(peer)
+    if media_state in ("premium", "partner_premium"):
+        await send_media_premium(peer, partner=media_state == "partner_premium")
     elif media_state == "failed":
         await gateway.send(peer, MEDIA_FAILED_TEXT, "chat")
     return True
@@ -344,11 +344,15 @@ async def send_premium_gate(peer: Peer) -> None:
     await gateway.send_premium(peer, offer)
 
 
-async def send_media_premium(peer: Peer) -> None:
+async def send_media_premium(peer: Peer, *, partner: bool = False) -> None:
     """Chat API не принял медиа из-за премиума.
 
+    partner — Chat API прямо сказал, что премиума нет у собеседника: ссылку не запрашиваем.
     Есть премиум у автора — значит, его нет у собеседника, продавать нечего.
     """
+    if partner:
+        await gateway.send(peer, PARTNER_NO_PREMIUM_TEXT, "chat")
+        return
     offer = await premium_offer(peer)
     if offer.premium_active:
         await gateway.send(peer, PARTNER_NO_PREMIUM_TEXT, "chat")

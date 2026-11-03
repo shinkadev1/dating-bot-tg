@@ -11,8 +11,8 @@ os.environ["DEV"] = "false"
 
 import httpx  # noqa: E402
 
-from app import handlers, paylink  # noqa: E402
-from app.api_client import ChatApiClient, ChatApiError, PremiumLink  # noqa: E402
+from app import handlers, media, paylink  # noqa: E402
+from app.api_client import ChatApiClient, ChatApiError, NotPremiumError, PremiumLink  # noqa: E402
 from app.gateway import Gateway  # noqa: E402
 from app.peer import Peer  # noqa: E402
 from app.ui import (  # noqa: E402
@@ -137,6 +137,21 @@ class HandlerTests(unittest.IsolatedAsyncioTestCase):
             await handlers.send_premium_gate(PEER)
         gw.send.assert_not_called()
         gw.send_premium.assert_awaited_once_with(PEER, active)
+
+    async def test_partner_detail_skips_pay_link(self) -> None:
+        gw = AsyncMock()
+        offer = AsyncMock()
+        with patch.object(handlers, "gateway", gw), patch.object(handlers, "premium_offer", offer):
+            await handlers.send_media_premium(PEER, partner=True)
+        offer.assert_not_called()
+        gw.send.assert_awaited_once_with(PEER, PARTNER_NO_PREMIUM_TEXT, "chat")
+        gw.send_pay_button.assert_not_called()
+
+    def test_media_state_from_403_detail(self) -> None:
+        partner = NotPremiumError('{"detail":"Собеседник без премиума не может получать медиа"}')
+        own = NotPremiumError('{"detail":"Фото, видео и аудио можно отправлять только с премиумом"}')
+        self.assertEqual(media._premium_state(PEER, partner), "partner_premium")
+        self.assertEqual(media._premium_state(PEER, own), "premium")
 
     def test_status_without_date(self) -> None:
         self.assertEqual(format_premium_active(None), "💎 Премиум активен")
