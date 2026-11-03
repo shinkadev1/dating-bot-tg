@@ -11,6 +11,7 @@ from aiogram import Bot
 from aiogram.exceptions import TelegramBadRequest, TelegramForbiddenError, TelegramRetryAfter
 from aiogram.types import BufferedInputFile, InlineKeyboardMarkup, ReplyKeyboardMarkup
 
+from app.api_types import PremiumLink
 from app.peer import Peer
 from app.ui import (
     CHAT_KEYBOARD,
@@ -18,12 +19,13 @@ from app.ui import (
     GREETING,
     IDLE_KEYBOARD,
     PARTNER_LEFT_KEYBOARD,
-    PREMIUM_KEYBOARD,
     PREMIUM_STATUS_TEXT,
     ROOMS_TEXT,
     SETTINGS_TEXT,
+    build_premium_keyboard,
     build_rooms_keyboard,
     build_settings_keyboard,
+    format_premium_active,
 )
 
 logger = logging.getLogger(__name__)
@@ -105,12 +107,22 @@ class Gateway:
             return sent
         return await self.send(peer, GREETING, "main")
 
-    async def send_premium(self, peer: Peer) -> bool:
-        """Промо премиума: картинка акции, список возможностей и кнопка оплаты."""
-        sent = await self._send_photo(peer, "premium.png", PREMIUM_STATUS_TEXT, PREMIUM_KEYBOARD)
+    async def send_premium(self, peer: Peer, offer: PremiumLink) -> bool:
+        """Промо премиума: картинка акции, список возможностей и кнопка с личной ссылкой оплаты.
+
+        Премиум уже действует — только срок, без продажи. Ссылка уходит кнопкой, не текстом.
+        """
+        if offer.premium_active:
+            return await self._send_text(peer, format_premium_active(offer.premium_until), None)
+        markup = build_premium_keyboard(offer.url)
+        sent = await self._send_photo(peer, "premium.png", PREMIUM_STATUS_TEXT, markup)
         if sent is not None:
             return sent
-        return await self._send_text(peer, PREMIUM_STATUS_TEXT, PREMIUM_KEYBOARD)
+        return await self._send_text(peer, PREMIUM_STATUS_TEXT, markup)
+
+    async def send_pay_button(self, peer: Peer, text: str, url: str) -> bool:
+        """Короткий текст и кнопка оплаты. Нижняя клавиатура остаётся прежней."""
+        return await self._send_text(peer, text, build_premium_keyboard(url))
 
     async def send_rooms(self, peer: Peer, selected: str) -> bool:
         """Текст выбора комнаты и inline-клавиатура с отмеченной комнатой."""

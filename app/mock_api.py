@@ -21,7 +21,7 @@ import uuid
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 
-from app.api_types import ChatApiError, NotChattingError, SendResult
+from app.api_types import ChatApiError, NotChattingError, PremiumLink, SendResult
 from app.config import DEV_ECHO, DEV_PARTNER_DELAY, DEV_REPLY_DELAY
 from app.peer import Peer
 
@@ -276,6 +276,10 @@ class MockChatApi:
     async def delivery_failed(self, peer: Peer) -> None:
         logger.info("[mock] недоставка %s", peer)
         await self._close(peer, "undeliverable")
+
+    async def premium_link(self, peer: Peer) -> PremiumLink:
+        """Как Chat API без PREMIUM_LINK_SECRET (503): бот покажет постоянную ссылку."""
+        raise ChatApiError("Оплата премиума в заглушке не настроена")
 
     # --- только для DEV: чего не сделать без второго человека ---------------
 

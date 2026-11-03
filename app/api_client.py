@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any
 
 import httpx
 
-from app.api_types import ChatApiError, NotChattingError, NotPremiumError, SendResult
+from app.api_types import ChatApiError, NotChattingError, NotPremiumError, PremiumLink, SendResult
 from app.config import CHAT_API_URL, DEV, chat_api_headers
 from app.mock_api import MockChatApi
 from app.peer import Peer
@@ -137,6 +138,16 @@ class ChatApiClient:
     async def delivery_failed(self, peer: Peer) -> None:
         await self._request("POST", peer, "delivery-failed")
 
+    async def premium_link(self, peer: Peer) -> PremiumLink:
+        """Личная ссылка на оплату премиума. 503 (оплата не настроена) — ChatApiError."""
+        body = await self._request("GET", peer, "premium/link")
+        try:
+            raw_until = body.get("premium_until")
+            until = datetime.fromisoformat(raw_until.replace("Z", "+00:00")) if raw_until else None
+            return PremiumLink(url=str(body["url"]), premium_active=bool(body["premium_active"]), premium_until=until)
+        except (AttributeError, KeyError, TypeError, ValueError) as exc:
+            raise ChatApiError(f"GET premium/link: неверный ответ: {type(exc).__name__}") from exc
+
 
 chat_api: ChatApiClient | MockChatApi
 if DEV:
@@ -152,6 +163,7 @@ __all__ = [
     "MockChatApi",
     "NotChattingError",
     "NotPremiumError",
+    "PremiumLink",
     "SendResult",
     "chat_api",
 ]

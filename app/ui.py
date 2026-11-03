@@ -1,5 +1,7 @@
 """Тексты, подписи кнопок и клавиатуры Telegram."""
 
+from datetime import datetime, timedelta, timezone
+
 from aiogram.types import (
     InlineKeyboardButton,
     InlineKeyboardMarkup,
@@ -42,8 +44,10 @@ UNDELIVERED_TEXT = "❌ Собеседник недоступен, диалог 
 SERVICE_DOWN_TEXT = "Сервис временно недоступен. Попробуй через минуту."
 MEDIA_FAILED_TEXT = "Не получилось сохранить медиа. Отправь ещё раз."
 
+# Запасная ссылка, если Chat API не выдал личную. Ссылки уходят только кнопкой, не текстом.
 PREMIUM_URL = "https://clck.su/cDapp"
-MEDIA_PREMIUM_TEXT = f"Чтобы отправлять медиа, получите премиум:\n{PREMIUM_URL}"
+MEDIA_PREMIUM_TEXT = "Чтобы отправлять медиа, получите премиум 👇"
+PARTNER_NO_PREMIUM_TEXT = "Собеседник без премиума не может получать медиа"
 PREMIUM_STATUS_TEXT = (
     "⚡ Временная акция, скидка 99%:\n\n"
     "🍓 Настройка поиска: например, только девушки младше 25 лет\n"
@@ -131,9 +135,22 @@ PARTNER_LEFT_KEYBOARD = ReplyKeyboardMarkup(
     resize_keyboard=True,
 )
 
-PREMIUM_KEYBOARD = InlineKeyboardMarkup(
-    inline_keyboard=[[InlineKeyboardButton(text=PREMIUM_BTN, url=PREMIUM_URL)]]
-)
+# Даты премиума показываем по Москве.
+_PREMIUM_TZ = timezone(timedelta(hours=3))
+
+
+def build_premium_keyboard(url: str) -> InlineKeyboardMarkup:
+    """Кнопка оплаты с личной ссылкой пользователя."""
+    return InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=PREMIUM_BTN, url=url)]])
+
+
+def format_premium_active(until: datetime | None) -> str:
+    """Статус для того, у кого премиум уже есть."""
+    if until is None:
+        return "💎 Премиум активен"
+    if until.tzinfo is None:
+        until = until.replace(tzinfo=timezone.utc)
+    return f"💎 Премиум активен до {until.astimezone(_PREMIUM_TZ):%d.%m.%Y}"
 
 
 def build_rooms_keyboard(selected: str) -> InlineKeyboardMarkup:

@@ -17,6 +17,7 @@ from app.config import DEV
 from app.gateway import gateway
 from app.media import has_tg_media, store_tg_media
 from app.mock_api import MockChatApi
+from app.paylink import premium_offer
 from app.peer import Peer
 from app.ui import (
     AGE_TEXT,
@@ -41,6 +42,7 @@ from app.ui import (
     NEW_PARTNER_BTN,
     NO_PARTNERS_TEXT,
     PARTNER_LEFT_TEXT,
+    PARTNER_NO_PREMIUM_TEXT,
     PREMIUM_BTN,
     PREMIUM_STATUS_BTN,
     REPORT_BTN,
@@ -188,7 +190,7 @@ async def handle_chat_line(
             await gateway.send(peer, PARTNER_LEFT_TEXT, "partner_left")
             return True
     if media_state == "premium":
-        await gateway.send(peer, MEDIA_PREMIUM_TEXT, "chat")
+        await send_media_premium(peer)
     elif media_state == "failed":
         await gateway.send(peer, MEDIA_FAILED_TEXT, "chat")
     return True
@@ -226,7 +228,7 @@ async def handle_incoming(
             await handle_report(peer)
             return
         if route == "premium":
-            await gateway.send_premium(peer)
+            await gateway.send_premium(peer, await premium_offer(peer))
             return
         if route == "find":
             await connect_with_partner(peer)
@@ -335,9 +337,23 @@ async def choose_gender(peer: Peer, callback: CallbackQuery, gender: str) -> Non
 
 
 async def send_premium_gate(peer: Peer) -> None:
-    """Текст «нужен Премиум» и сразу промо с кнопкой оплаты."""
-    await gateway.send(peer, DATING_TEXT, "dating")
-    await gateway.send_premium(peer)
+    """Текст «нужен Премиум» и сразу промо с личной кнопкой оплаты. С премиумом — только срок."""
+    offer = await premium_offer(peer)
+    if not offer.premium_active:
+        await gateway.send(peer, DATING_TEXT, "dating")
+    await gateway.send_premium(peer, offer)
+
+
+async def send_media_premium(peer: Peer) -> None:
+    """Chat API не принял медиа из-за премиума.
+
+    Есть премиум у автора — значит, его нет у собеседника, продавать нечего.
+    """
+    offer = await premium_offer(peer)
+    if offer.premium_active:
+        await gateway.send(peer, PARTNER_NO_PREMIUM_TEXT, "chat")
+        return
+    await gateway.send_pay_button(peer, MEDIA_PREMIUM_TEXT, offer.url)
 
 
 async def handle_dating_find(peer: Peer) -> None:

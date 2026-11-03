@@ -18,6 +18,7 @@ Telegram → aiogram handlers → HTTPS Chat API через Cloudflare Access. �
 | `app/api_types.py` | Типы API. |
 | `app/events.py` | WebSocket-события и рассылки. |
 | `app/media.py` | Telegram-медиа и ссылки на файлы. |
+| `app/paylink.py` | Личная ссылка оплаты премиума из Chat API, запасная `PREMIUM_URL`. |
 | `app/mock_api.py` | In-memory заглушка REST/событий. |
 | `app/config.py` | Настройки, DEV и заголовки API. |
 

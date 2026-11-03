@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 
 
 class ChatApiError(Exception):
@@ -21,3 +22,12 @@ class NotPremiumError(ChatApiError):
 class SendResult:
     delivered: bool
     phase: str
+
+
+@dataclass(frozen=True)
+class PremiumLink:
+    """Личная ссылка на оплату (действует 24 часа) и текущий срок премиума."""
+
+    url: str
+    premium_active: bool
+    premium_until: datetime | None
