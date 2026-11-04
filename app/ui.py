@@ -45,7 +45,7 @@ SERVICE_DOWN_TEXT = "Сервис временно недоступен. Поп�
 MEDIA_FAILED_TEXT = "Не получилось сохранить медиа. Отправь ещё раз."
 
 # Запасная ссылка, если Chat API не выдал личную. Ссылки уходят только кнопкой, не текстом.
-PREMIUM_URL = "https://clck.su/cDapp"
+PREMIUM_URL = "https://pay.chatwithyou.site/"
 MEDIA_PREMIUM_TEXT = "Чтобы отправлять медиа, получите премиум 👇"
 PARTNER_NO_PREMIUM_TEXT = "Собеседник без премиума не может получать медиа"
 PREMIUM_STATUS_TEXT = (
