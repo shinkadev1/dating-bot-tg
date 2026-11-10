@@ -88,6 +88,9 @@ _BUTTON_ROUTES = {
     "❤️ найти девушку": "dating_find",
     "найти девушку": "dating_find",
     DATING_ROOMS_BTN.lower(): "dating_rooms",
+    "выбрать город": "dating_rooms",
+    # Старая подпись: у людей может остаться прежняя клавиатура.
+    "🌍 выбрать комнату": "dating_rooms",
     "выбрать комнату": "dating_rooms",
     DATING_SETTINGS_BTN.lower(): "dating_settings",
     "настроить поиск": "dating_settings",
@@ -319,7 +322,7 @@ async def choose_room(peer: Peer, callback: CallbackQuery, room: str) -> None:
             await callback.message.edit_reply_markup(reply_markup=build_rooms_keyboard(room))
         except Exception as exc:  # noqa: BLE001 — клавиатуру можно и не обновить
             logger.warning("Не обновил комнату %s: %s: %s", peer, type(exc).__name__, exc)
-    await callback.answer(text=f"Комната: {ROOMS[room]}")
+    await callback.answer(text=f"Город: {ROOMS[room]}")
 
 
 async def choose_gender(peer: Peer, callback: CallbackQuery, gender: str) -> None:
