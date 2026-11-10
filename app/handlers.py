@@ -83,6 +83,9 @@ _BUTTON_ROUTES = {
     DATING_BTN.lower(): "dating",
     "чат знакомств": "dating",
     DATING_FIND_BTN.lower(): "dating_find",
+    "пошлый чат": "dating_find",
+    # Старая подпись: у людей может остаться прежняя клавиатура.
+    "❤️ найти девушку": "dating_find",
     "найти девушку": "dating_find",
     DATING_ROOMS_BTN.lower(): "dating_rooms",
     "выбрать комнату": "dating_rooms",
@@ -361,7 +364,7 @@ async def send_media_premium(peer: Peer, *, partner: bool = False) -> None:
 
 
 async def handle_dating_find(peer: Peer) -> None:
-    """Кнопка «Найти девушку»: без премиума поиск не начинается — текст и промо."""
+    """Кнопка «Пошлый чат»: без премиума поиск не начинается — текст и промо."""
     await send_premium_gate(peer)
 
 
