@@ -19,10 +19,13 @@ from app.ui import (  # noqa: E402
     MEDIA_PREMIUM_TEXT,
     PARTNER_NO_PREMIUM_TEXT,
     PREMIUM_URL,
+    build_premium_keyboard,
     format_premium_active,
+    with_plan,
 )
 
 PEER = Peer("123", 42)
+CHECKOUT = "https://pay.example.test/checkout/tok?utm_source=tg&utm_campaign=premium"
 PAY_URL = "https://pay.example.test/?utm_source=tg&utm_campaign=premium&utm_content=tok"
 
 
@@ -38,6 +41,10 @@ def client_with(handler) -> ChatApiClient:
 
 def button_url(markup) -> str:
     return markup.inline_keyboard[0][0].url
+
+
+def layout(markup) -> list[list[str]]:
+    return [[b.text for b in row] for row in markup.inline_keyboard]
 
 
 class ClientTests(unittest.IsolatedAsyncioTestCase):
@@ -96,7 +103,12 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
     async def test_promo_carries_personal_button_not_text(self) -> None:
         await self.gateway.send_premium(PEER, PremiumLink(PAY_URL, False, None))
         call = self.bot.send_photo.call_args
-        self.assertEqual(button_url(call.kwargs["reply_markup"]), PAY_URL)
+        markup = call.kwargs["reply_markup"]
+        self.assertEqual(
+            layout(markup),
+            [["🎁 Пробный 3 дня — 1 ₽"], ["Неделя — 299 ₽", "Месяц — 999 ₽"], ["Год — 2999 ₽"]],
+        )
+        self.assertEqual(button_url(markup), PAY_URL + "&plan=trial")
         self.assertNotIn("http", call.kwargs["caption"])
 
     async def test_active_premium_shows_status_without_sale(self) -> None:
@@ -105,13 +117,25 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
         self.bot.send_photo.assert_not_called()
         args = self.bot.send_message.call_args
         self.assertEqual(args.args[1], "💎 Премиум активен до 02.12.2026")
-        self.assertIsNone(args.kwargs["reply_markup"])
+        markup = args.kwargs["reply_markup"]
+        self.assertEqual(layout(markup), [["Неделя — 299 ₽", "Месяц — 999 ₽"], ["Год — 2999 ₽"]])
+        urls = [b.url for row in markup.inline_keyboard for b in row]
+        self.assertEqual(urls, [PAY_URL + f"&plan={p}" for p in ("week", "month", "year")])
+
+    def test_plan_urls(self) -> None:
+        markup = build_premium_keyboard(CHECKOUT)
+        urls = [b.url for row in markup.inline_keyboard for b in row]
+        self.assertEqual(urls, [CHECKOUT + f"&plan={p}" for p in ("trial", "week", "month", "year")])
+        fallback = build_premium_keyboard(PREMIUM_URL)
+        self.assertEqual(button_url(fallback), PREMIUM_URL + "?plan=trial")
+        self.assertEqual(with_plan(CHECKOUT + "&plan=old", "year"), CHECKOUT + "&plan=year")
 
     async def test_pay_button(self) -> None:
         await self.gateway.send_pay_button(PEER, MEDIA_PREMIUM_TEXT, PAY_URL)
         args = self.bot.send_message.call_args
         self.assertNotIn("http", args.args[1])
-        self.assertEqual(button_url(args.kwargs["reply_markup"]), PAY_URL)
+        self.assertEqual(len(args.kwargs["reply_markup"].inline_keyboard), 3)
+        self.assertEqual(button_url(args.kwargs["reply_markup"]), PAY_URL + "&plan=trial")
 
 
 class HandlerTests(unittest.IsolatedAsyncioTestCase):

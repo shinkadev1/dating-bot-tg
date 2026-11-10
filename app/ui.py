@@ -1,6 +1,7 @@
 """Тексты, подписи кнопок и клавиатуры Telegram."""
 
 from datetime import datetime, timedelta, timezone
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from aiogram.types import (
     InlineKeyboardButton,
@@ -139,9 +140,38 @@ PARTNER_LEFT_KEYBOARD = ReplyKeyboardMarkup(
 _PREMIUM_TZ = timezone(timedelta(hours=3))
 
 
-def build_premium_keyboard(url: str) -> InlineKeyboardMarkup:
-    """Кнопка оплаты с личной ссылкой пользователя."""
-    return InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=PREMIUM_BTN, url=url)]])
+# Тарифы: (plan, подпись кнопки). Цены меняются только здесь.
+PREMIUM_PLANS: tuple[tuple[str, str], ...] = (
+    ("trial", "🎁 Пробный 3 дня — 1 ₽"),
+    ("week", "Неделя — 299 ₽"),
+    ("month", "Месяц — 999 ₽"),
+    ("year", "Год — 2999 ₽"),
+)
+
+
+def with_plan(url: str, plan: str) -> str:
+    """Добавляет plan в query ссылки оплаты, сохраняя остальные параметры."""
+    parts = urlsplit(url)
+    query = [(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True) if k != "plan"]
+    query.append(("plan", plan))
+    return urlunsplit(parts._replace(query=urlencode(query)))
+
+
+def build_premium_keyboard(url: str, *, trial: bool = True) -> InlineKeyboardMarkup:
+    """Кнопки тарифов: пробный отдельным рядом, неделя и месяц парой, год отдельным рядом.
+
+    trial=False (премиум уже активен) — без пробного, только продление.
+    """
+    buttons = {
+        plan: InlineKeyboardButton(text=label, url=with_plan(url, plan))
+        for plan, label in PREMIUM_PLANS
+        if trial or plan != "trial"
+    }
+    rows = [
+        [buttons[p] for p in row if p in buttons]
+        for row in (("trial",), ("week", "month"), ("year",))
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=[r for r in rows if r])
 
 
 def format_premium_active(until: datetime | None) -> str:

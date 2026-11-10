@@ -108,12 +108,13 @@ class Gateway:
         return await self.send(peer, GREETING, "main")
 
     async def send_premium(self, peer: Peer, offer: PremiumLink) -> bool:
-        """Промо премиума: картинка акции, список возможностей и кнопка с личной ссылкой оплаты.
+        """Промо премиума: картинка акции, список возможностей и кнопки тарифов с личной ссылкой оплаты.
 
-        Премиум уже действует — только срок, без продажи. Ссылка уходит кнопкой, не текстом.
+        Премиум уже действует — срок и кнопки продления без пробного. Ссылка уходит кнопкой, не текстом.
         """
         if offer.premium_active:
-            return await self._send_text(peer, format_premium_active(offer.premium_until), None)
+            markup = build_premium_keyboard(offer.url, trial=False)
+            return await self._send_text(peer, format_premium_active(offer.premium_until), markup)
         markup = build_premium_keyboard(offer.url)
         sent = await self._send_photo(peer, "premium.png", PREMIUM_STATUS_TEXT, markup)
         if sent is not None:
