@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import os
 import unittest
+from unittest.mock import AsyncMock, MagicMock
 
 os.environ["DEV"] = "false"
 
-from app.handlers import _route  # noqa: E402
+from app.handlers import _route, choose_room  # noqa: E402
+from app.peer import Peer  # noqa: E402
 from app.ui import DATING_KEYBOARD, DATING_ROOMS_BTN, DEFAULT_ROOM, ROOMS, build_rooms_keyboard  # noqa: E402
 
 CITIES = ["Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург", "Казань", "Нижний Новгород", "Любой город"]
@@ -29,6 +31,19 @@ class ChooseCityTests(unittest.TestCase):
         self.assertIn("Санкт-Петербург ✅", labels)
         self.assertEqual(sum("✅" in t for t in labels), 1)
         self.assertTrue(all(b.callback_data.startswith("room:") for r in rows for b in r))
+
+
+class StaleRoomButtonTests(unittest.IsolatedAsyncioTestCase):
+    async def test_old_room_button_shows_cities(self) -> None:
+        callback = MagicMock()
+        callback.answer = AsyncMock()
+        callback.message.edit_text = AsyncMock()
+        await choose_room(Peer("main", 1), callback, "talk")
+        text, = callback.message.edit_text.call_args.args
+        self.assertTrue(text.startswith("📍"))
+        markup = callback.message.edit_text.call_args.kwargs["reply_markup"]
+        self.assertIn("Санкт-Петербург ✅", [b.text for r in markup.inline_keyboard for b in r])
+        callback.answer.assert_awaited_once()
 
 
 if __name__ == "__main__":

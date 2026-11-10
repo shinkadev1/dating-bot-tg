@@ -48,6 +48,7 @@ from app.ui import (
     REPORT_BTN,
     REPORT_SENT_TEXT,
     ROOMS,
+    ROOMS_TEXT,
     SEARCHING_TEXT,
     SERVICE_DOWN_TEXT,
     START_BTN,
@@ -311,9 +312,15 @@ async def on_callback(callback: CallbackQuery) -> None:
 
 
 async def choose_room(peer: Peer, callback: CallbackQuery, room: str) -> None:
-    """Нажатие комнаты: запоминает выбор, переносит галочку и показывает тост."""
+    """Нажатие города: запоминает выбор, переносит галочку и показывает тост."""
     if room not in ROOMS:
-        await callback.answer()
+        # Кнопка из старого сообщения со списком комнат: показываем вместо него города.
+        if callback.message is not None:
+            try:
+                await callback.message.edit_text(ROOMS_TEXT, reply_markup=build_rooms_keyboard(peer_room(peer)))
+            except Exception as exc:  # noqa: BLE001 — старое сообщение можно и не обновить
+                logger.warning("Не обновил старый список %s: %s: %s", peer, type(exc).__name__, exc)
+        await callback.answer(text="Список обновлён — выберите город")
         return
     changed = _room_choice.get(peer) != room
     _room_choice[peer] = room
@@ -321,7 +328,7 @@ async def choose_room(peer: Peer, callback: CallbackQuery, room: str) -> None:
         try:
             await callback.message.edit_reply_markup(reply_markup=build_rooms_keyboard(room))
         except Exception as exc:  # noqa: BLE001 — клавиатуру можно и не обновить
-            logger.warning("Не обновил комнату %s: %s: %s", peer, type(exc).__name__, exc)
+            logger.warning("Не обновил город %s: %s: %s", peer, type(exc).__name__, exc)
     await callback.answer(text=f"Город: {ROOMS[room]}")
 
 
