@@ -12,7 +12,9 @@ Telegram → aiogram handlers → HTTPS Chat API через Cloudflare Access. �
 | --- | --- |
 | `app/main.py` | Запуск aiogram и потребителей событий. |
 | `app/handlers.py` | Команды, поиск, премиум-промо, комнаты и настройки. |
-| `app/ui.py` | Тексты, reply/inline клавиатуры, ссылки. |
+| `app/content/content.json` | Контент из Bot CRM: тексты, подписи кнопок и их прежние подписи, списки, раскладка клавиатур, картинки, экраны. |
+| `app/content.py` | Загрузка и проверка content.json при старте (`ContentError`). |
+| `app/ui.py` | Имена текстов и сборка reply/inline клавиатур из content.json; ссылки. |
 | `app/gateway.py` | Отправка ответов, баннеров и медиа. |
 | `app/api_client.py` | REST Chat API. |
 | `app/api_types.py` | Типы API. |

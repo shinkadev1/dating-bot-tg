@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from pathlib import Path
 from typing import Literal
 
 from aiogram import Bot
@@ -12,6 +11,7 @@ from aiogram.exceptions import TelegramBadRequest, TelegramForbiddenError, Teleg
 from aiogram.types import BufferedInputFile, InlineKeyboardMarkup, ReplyKeyboardMarkup
 
 from app.api_types import PremiumLink
+from app.content import ContentError, image_path
 from app.peer import Peer
 from app.ui import (
     CHAT_KEYBOARD,
@@ -41,16 +41,15 @@ _KEYBOARDS: dict[str, ReplyKeyboardMarkup | None] = {
     "notice": None,
 }
 
-_ASSETS = Path(__file__).resolve().parent / "assets"
 _ASSETS_CACHE: dict[str, bytes] = {}
 
 
 def _asset(name: str) -> bytes | None:
-    """Картинка из `app/assets`. Файла нет — None: текст важнее баннера."""
+    """Картинка из content.json (раздел images). Файла нет — None: текст важнее баннера."""
     if name not in _ASSETS_CACHE:
         try:
-            _ASSETS_CACHE[name] = (_ASSETS / name).read_bytes()
-        except OSError as exc:
+            _ASSETS_CACHE[name] = image_path(name).read_bytes()
+        except (OSError, ContentError) as exc:
             logger.warning("Нет картинки %s: %s", name, exc)
             _ASSETS_CACHE[name] = b""
     return _ASSETS_CACHE[name] or None
@@ -102,7 +101,7 @@ class Gateway:
 
     async def send_greeting(self, peer: Peer) -> bool:
         """Приветствие с баннером, текстом и нижней клавиатурой одним сообщением."""
-        sent = await self._send_photo(peer, "greeting.jpg", GREETING, IDLE_KEYBOARD)
+        sent = await self._send_photo(peer, "greeting", GREETING, IDLE_KEYBOARD)
         if sent is not None:
             return sent
         return await self.send(peer, GREETING, "main")
@@ -116,7 +115,7 @@ class Gateway:
             markup = build_premium_keyboard(offer.url, trial=False)
             return await self._send_text(peer, format_premium_active(offer.premium_until), markup)
         markup = build_premium_keyboard(offer.url)
-        sent = await self._send_photo(peer, "premium.png", PREMIUM_STATUS_TEXT, markup)
+        sent = await self._send_photo(peer, "premium", PREMIUM_STATUS_TEXT, markup)
         if sent is not None:
             return sent
         return await self._send_text(peer, PREMIUM_STATUS_TEXT, markup)
@@ -150,7 +149,7 @@ class Gateway:
             try:
                 await self._bot.send_photo(
                     peer.user_id,
-                    BufferedInputFile(photo, filename=name),
+                    BufferedInputFile(photo, filename=image_path(name).name),
                     caption=caption[:1024],
                     reply_markup=markup,
                 )

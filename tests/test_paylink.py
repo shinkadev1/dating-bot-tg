@@ -11,13 +11,16 @@ os.environ["DEV"] = "false"
 
 import httpx  # noqa: E402
 
-from app import handlers, media, paylink  # noqa: E402
+from app import content, handlers, media, paylink  # noqa: E402
 from app.api_client import ChatApiClient, ChatApiError, NotPremiumError, PremiumLink  # noqa: E402
 from app.gateway import Gateway  # noqa: E402
 from app.peer import Peer  # noqa: E402
 from app.ui import (  # noqa: E402
     MEDIA_PREMIUM_TEXT,
     PARTNER_NO_PREMIUM_TEXT,
+    PREMIUM_ACTIVE_TEXT,
+    PREMIUM_ACTIVE_UNTIL_TEXT,
+    PREMIUM_PLANS,
     PREMIUM_URL,
     build_premium_keyboard,
     format_premium_active,
@@ -27,6 +30,11 @@ from app.ui import (  # noqa: E402
 PEER = Peer("123", 42)
 CHECKOUT = "https://pay.example.test/checkout/tok?utm_source=tg&utm_campaign=premium"
 PAY_URL = "https://pay.example.test/?utm_source=tg&utm_campaign=premium&utm_content=tok"
+# Подписи тарифов и раскладка — в app/content/content.json.
+_PLANS = dict(PREMIUM_PLANS)
+_ROWS = [[c["item"] for c in row] for row in content.keyboard("PREMIUM_KEYBOARD")["rows"]]
+ALL_PLANS = [[_PLANS[p] for p in row] for row in _ROWS]
+RENEW_PLANS = [r for r in ([_PLANS[p] for p in row if p != "trial"] for row in _ROWS) if r]
 
 
 def client_with(handler) -> ChatApiClient:
@@ -106,7 +114,7 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
         markup = call.kwargs["reply_markup"]
         self.assertEqual(
             layout(markup),
-            [["🎁 Пробный 3 дня — 1 ₽"], ["Неделя — 299 ₽", "Месяц — 999 ₽"], ["Год — 2999 ₽"]],
+            ALL_PLANS,
         )
         self.assertEqual(button_url(markup), PAY_URL + "&plan=trial")
         self.assertNotIn("http", call.kwargs["caption"])
@@ -116,9 +124,9 @@ class GatewayTests(unittest.IsolatedAsyncioTestCase):
         await self.gateway.send_premium(PEER, PremiumLink(PAY_URL, True, until))
         self.bot.send_photo.assert_not_called()
         args = self.bot.send_message.call_args
-        self.assertEqual(args.args[1], "💎 Премиум активен до 02.12.2026")
+        self.assertEqual(args.args[1], PREMIUM_ACTIVE_UNTIL_TEXT.replace("{date}", "02.12.2026"))
         markup = args.kwargs["reply_markup"]
-        self.assertEqual(layout(markup), [["Неделя — 299 ₽", "Месяц — 999 ₽"], ["Год — 2999 ₽"]])
+        self.assertEqual(layout(markup), RENEW_PLANS)
         urls = [b.url for row in markup.inline_keyboard for b in row]
         self.assertEqual(urls, [PAY_URL + f"&plan={p}" for p in ("week", "month", "year")])
 
@@ -178,7 +186,7 @@ class HandlerTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(media._premium_state(PEER, own), "premium")
 
     def test_status_without_date(self) -> None:
-        self.assertEqual(format_premium_active(None), "💎 Премиум активен")
+        self.assertEqual(format_premium_active(None), PREMIUM_ACTIVE_TEXT)
 
 
 if __name__ == "__main__":

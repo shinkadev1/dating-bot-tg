@@ -14,15 +14,16 @@ from app.config import CHAT_API_TG_TOKEN, CHAT_API_URL, DEV, TELEGRAM_BOT_TOKEN
 from app.events import consume_broadcasts, consume_events
 from app.gateway import gateway
 from app.handlers import router
+from app.ui import COMMAND_NEXT, COMMAND_START, COMMAND_STOP
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger("tg_bot")
 
 _COMMANDS = [
-    BotCommand(command="start", description="Найти собеседника"),
-    BotCommand(command="next", description="Следующий собеседник"),
-    BotCommand(command="stop", description="Закончить диалог"),
+    BotCommand(command="start", description=COMMAND_START),
+    BotCommand(command="next", description=COMMAND_NEXT),
+    BotCommand(command="stop", description=COMMAND_STOP),
 ]
 if DEV:
     _COMMANDS += [

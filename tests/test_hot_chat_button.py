@@ -1,4 +1,4 @@
-"""Кнопка «🔥 Пошлый чат» (бывшая «❤️ Найти девушку»)."""
+"""Кнопка «Пошлый чат» (бывшая «❤️ Найти девушку»). Подписи — из app/content/content.json."""
 
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ from app.ui import DATING_FIND_BTN, DATING_KEYBOARD  # noqa: E402
 
 class HotChatButtonTests(unittest.TestCase):
     def test_new_label_routes_to_dating_find(self) -> None:
-        self.assertEqual(DATING_FIND_BTN, "🔥 Пошлый чат")
         self.assertEqual(_route(DATING_FIND_BTN), "dating_find")
         self.assertEqual(_route("пошлый чат"), "dating_find")
 
@@ -23,8 +22,8 @@ class HotChatButtonTests(unittest.TestCase):
 
     def test_dating_keyboard_shows_new_label(self) -> None:
         text = str(DATING_KEYBOARD)
-        self.assertIn("🔥 Пошлый чат", text)
-        self.assertNotIn("Найти девушку", text)
+        self.assertIn(DATING_FIND_BTN, text)
+        self.assertNotIn("❤️ Найти девушку", text)
 
 
 if __name__ == "__main__":

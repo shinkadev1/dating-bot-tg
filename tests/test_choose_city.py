@@ -10,25 +10,33 @@ os.environ["DEV"] = "false"
 
 from app.handlers import _route, choose_room  # noqa: E402
 from app.peer import Peer  # noqa: E402
-from app.ui import DATING_KEYBOARD, DATING_ROOMS_BTN, DEFAULT_ROOM, ROOMS, build_rooms_keyboard  # noqa: E402
+from app.ui import (  # noqa: E402
+    DATING_KEYBOARD,
+    DATING_ROOMS_BTN,
+    DEFAULT_ROOM,
+    ROOM_ROWS,
+    ROOMS,
+    ROOMS_TEXT,
+    build_rooms_keyboard,
+)
 
-CITIES = ["Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург", "Казань", "Нижний Новгород", "Любой город"]
+# Названия городов и раскладка — в app/content/content.json (lists.ROOMS, keyboards.ROOMS_KEYBOARD).
+SELECTED = ROOMS["spb"] + " ✅"
 
 
 class ChooseCityTests(unittest.TestCase):
     def test_button_label_and_routes(self) -> None:
-        self.assertEqual(DATING_ROOMS_BTN, "📍 Выбрать город")
-        self.assertIn("📍 Выбрать город", str(DATING_KEYBOARD))
-        for text in ("📍 Выбрать город", "выбрать город", "🌍 Выбрать комнату", "Выбрать комнату"):
+        self.assertIn(DATING_ROOMS_BTN, str(DATING_KEYBOARD))
+        for text in (DATING_ROOMS_BTN, "выбрать город", "🌍 Выбрать комнату", "Выбрать комнату"):
             self.assertEqual(_route(text), "dating_rooms", text)
 
     def test_cities_keyboard(self) -> None:
-        self.assertEqual(list(ROOMS.values()), CITIES)
+        self.assertEqual({k for row in ROOM_ROWS for k in row}, set(ROOMS))
         self.assertEqual(DEFAULT_ROOM, "spb")
         rows = build_rooms_keyboard("spb").inline_keyboard
-        self.assertEqual([len(r) for r in rows], [2, 2, 2, 1])
+        self.assertEqual([len(r) for r in rows], [len(r) for r in ROOM_ROWS])
         labels = [b.text for r in rows for b in r]
-        self.assertIn("Санкт-Петербург ✅", labels)
+        self.assertIn(SELECTED, labels)
         self.assertEqual(sum("✅" in t for t in labels), 1)
         self.assertTrue(all(b.callback_data.startswith("room:") for r in rows for b in r))
 
@@ -40,9 +48,9 @@ class StaleRoomButtonTests(unittest.IsolatedAsyncioTestCase):
         callback.message.edit_text = AsyncMock()
         await choose_room(Peer("main", 1), callback, "talk")
         text, = callback.message.edit_text.call_args.args
-        self.assertTrue(text.startswith("📍"))
+        self.assertEqual(text, ROOMS_TEXT)
         markup = callback.message.edit_text.call_args.kwargs["reply_markup"]
-        self.assertIn("Санкт-Петербург ✅", [b.text for r in markup.inline_keyboard for b in r])
+        self.assertIn(SELECTED, [b.text for r in markup.inline_keyboard for b in r])
         callback.answer.assert_awaited_once()
 
 

@@ -17,41 +17,31 @@ from app.config import DEV
 from app.gateway import gateway
 from app.media import has_tg_media, store_tg_media
 from app.mock_api import MockChatApi
+from app.content import button_variants
 from app.paylink import premium_offer
 from app.peer import Peer
 from app.ui import (
+    ROOMS_REFRESHED_TOAST,
+    city_selected_toast,
     AGE_TEXT,
-    CHAT_BTN_NEXT,
-    CHAT_BTN_STOP,
-    DATING_BTN,
-    DATING_FIND_BTN,
-    DATING_ROOMS_BTN,
-    DATING_SETTINGS_BTN,
     DATING_TEXT,
     DEFAULT_ROOM,
     DEV_LEAVE_COMMAND,
     DEV_NOTICE_COMMAND,
     DEV_NOTICE_TEXT,
-    FIND_BTN,
     FOUND_TEXT,
     GENDERS,
-    MAIN_MENU_BTN,
     MEDIA_FAILED_TEXT,
     MEDIA_PREMIUM_TEXT,
     MENU_TEXT,
-    NEW_PARTNER_BTN,
     NO_PARTNERS_TEXT,
     PARTNER_LEFT_TEXT,
     PARTNER_NO_PREMIUM_TEXT,
-    PREMIUM_BTN,
-    PREMIUM_STATUS_BTN,
-    REPORT_BTN,
     REPORT_SENT_TEXT,
     ROOMS,
     ROOMS_TEXT,
     SEARCHING_TEXT,
     SERVICE_DOWN_TEXT,
-    START_BTN,
     STOPPED_TEXT,
     build_rooms_keyboard,
     build_settings_keyboard,
@@ -72,34 +62,31 @@ _AGE_RE = re.compile(
     re.IGNORECASE,
 )
 
-_START_COMMANDS = {"/start", "/search", START_BTN.lower(), NEW_PARTNER_BTN.lower()}
-_NEXT_COMMANDS = {"/next", CHAT_BTN_NEXT.lower()}
-_STOP_COMMANDS = {"/stop", CHAT_BTN_STOP.lower()}
-_REPORT_COMMANDS = {"/report", REPORT_BTN.lower(), "пожаловаться"}
+_START_COMMANDS = {"/start", "/search", *button_variants("START_BTN"), *button_variants("NEW_PARTNER_BTN")}
+_NEXT_COMMANDS = {"/next", *button_variants("CHAT_BTN_NEXT")}
+_STOP_COMMANDS = {"/stop", *button_variants("CHAT_BTN_STOP")}
+_REPORT_COMMANDS = {"/report", *button_variants("REPORT_BTN"), "пожаловаться"}
 
 # Нижняя клавиатура Telegram не умеет payload: маршрут определяем по тексту кнопки.
+# Подпись и прежние подписи — из content.json (button_aliases), плюс ручной ввод без эмодзи.
 _BUTTON_ROUTES = {
-    FIND_BTN.lower(): "find",
+    **{v: "find" for v in button_variants("FIND_BTN")},
     "найти собеседника": "find",
-    DATING_BTN.lower(): "dating",
+    **{v: "dating" for v in button_variants("DATING_BTN")},
     "чат знакомств": "dating",
-    DATING_FIND_BTN.lower(): "dating_find",
+    **{v: "dating_find" for v in button_variants("DATING_FIND_BTN")},
     "пошлый чат": "dating_find",
-    # Старая подпись: у людей может остаться прежняя клавиатура.
-    "❤️ найти девушку": "dating_find",
     "найти девушку": "dating_find",
-    DATING_ROOMS_BTN.lower(): "dating_rooms",
+    **{v: "dating_rooms" for v in button_variants("DATING_ROOMS_BTN")},
     "выбрать город": "dating_rooms",
-    # Старая подпись: у людей может остаться прежняя клавиатура.
-    "🌍 выбрать комнату": "dating_rooms",
     "выбрать комнату": "dating_rooms",
-    DATING_SETTINGS_BTN.lower(): "dating_settings",
+    **{v: "dating_settings" for v in button_variants("DATING_SETTINGS_BTN")},
     "настроить поиск": "dating_settings",
-    MAIN_MENU_BTN.lower(): "main",
+    **{v: "main" for v in button_variants("MAIN_MENU_BTN")},
     "главное меню": "main",
-    PREMIUM_STATUS_BTN.lower(): "premium",
+    **{v: "premium" for v in button_variants("PREMIUM_STATUS_BTN")},
     "премиум статус": "premium",
-    PREMIUM_BTN.lower(): "premium",
+    **{v: "premium" for v in button_variants("PREMIUM_BTN")},
     "купить премиум": "premium",
 }
 
@@ -320,7 +307,7 @@ async def choose_room(peer: Peer, callback: CallbackQuery, room: str) -> None:
                 await callback.message.edit_text(ROOMS_TEXT, reply_markup=build_rooms_keyboard(peer_room(peer)))
             except Exception as exc:  # noqa: BLE001 — старое сообщение можно и не обновить
                 logger.warning("Не обновил старый список %s: %s: %s", peer, type(exc).__name__, exc)
-        await callback.answer(text="Список обновлён — выберите город")
+        await callback.answer(text=ROOMS_REFRESHED_TOAST)
         return
     changed = _room_choice.get(peer) != room
     _room_choice[peer] = room
@@ -329,7 +316,7 @@ async def choose_room(peer: Peer, callback: CallbackQuery, room: str) -> None:
             await callback.message.edit_reply_markup(reply_markup=build_rooms_keyboard(room))
         except Exception as exc:  # noqa: BLE001 — клавиатуру можно и не обновить
             logger.warning("Не обновил город %s: %s: %s", peer, type(exc).__name__, exc)
-    await callback.answer(text=f"Город: {ROOMS[room]}")
+    await callback.answer(text=city_selected_toast(room))
 
 
 async def choose_gender(peer: Peer, callback: CallbackQuery, gender: str) -> None:
