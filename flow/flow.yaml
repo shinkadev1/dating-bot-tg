@@ -1,0 +1,267 @@
+# Карта бота Telegram: экраны, кнопки, переходы, тексты и меню команд.
+# Формат описан в flow.schema.json (version 1) и читается CRM «Постдеск». Менять тексты и кнопки нужно здесь.
+# Новые action/handler/on сначала регистрируются в коде (handlers.ACTIONS / HANDLERS, events.EVENTS).
+# pos — положение узла на карте CRM; title — подпись узла.
+version: 1
+bot: tg
+start: main
+
+screens:
+  main:
+    title: "Главное меню и приветствие"
+    text: |-
+      👋 Привет! Это чат для анонимных знакомств, флирта и легкого общения
+      Найди собеседника прямо сейчас: отправь /start
+    image: "images/greeting.jpg"
+    keyboard: reply
+    buttons:
+      - - text: "🔍 Найти собеседника"
+          action: find
+          style: primary
+          aliases: ["найти собеседника"]
+          next: chat
+        - text: "💘 Чат знакомств"
+          action: dating
+          style: primary
+          aliases: ["чат знакомств"]
+          next: dating
+      - - text: "👑 Премиум статус"
+          action: premium
+          style: success
+          aliases: ["премиум статус"]
+          next: premium
+    pos:
+      x: 0
+      y: 0
+
+  menu:
+    title: "Меню после возврата"
+    text: "Найди собеседника прямо сейчас"
+    keyboard: reply
+    buttons_from: main
+    pos:
+      x: 640
+      y: 360
+
+  dating:
+    title: "Чат знакомств"
+    text: "👑 Для продолжения нужен Премиум"
+    keyboard: reply
+    buttons:
+      - - text: "🔥 Пошлый чат"
+          action: dating_find
+          style: primary
+          aliases: ["пошлый чат", "❤️ найти девушку", "найти девушку"]
+          next: premium
+        - text: "📍 Выбрать город"
+          action: dating_rooms
+          style: primary
+          aliases: ["выбрать город", "🌍 выбрать комнату", "выбрать комнату"]
+          next: rooms
+      - - text: "⚙️ Настроить поиск"
+          action: dating_settings
+          style: primary
+          aliases: ["настроить поиск"]
+          next: settings
+        - text: "◀️ Главное меню"
+          action: main
+          aliases: ["главное меню"]
+          next: menu
+    pos:
+      x: 320
+      y: 180
+
+  chat:
+    title: "Диалог с собеседником"
+    on: partner_found
+    text: "💬 Собеседник найден. Вы можете писать ему сюда 👇"
+    keyboard: reply
+    buttons:
+      - - text: "➡️ Следующий собеседник"
+          action: next
+          next: chat
+      - - text: "💎 Купить премиум"
+          action: premium
+          style: success
+          aliases: ["купить премиум"]
+          next: premium
+      - - text: "🛑 Закончить диалог"
+          action: stop
+          next: main
+    pos:
+      x: 320
+      y: 0
+
+  partner_left:
+    title: "Собеседник закончил диалог"
+    on: partner_left
+    text: |-
+      Собеседник закончил диалог 😔
+
+      Пожалуйста, нажмите Пожаловаться, если встретили спам.
+    keyboard: reply
+    buttons:
+      - - text: "🔍 Новый собеседник"
+          action: start
+          style: primary
+          aliases: ["Начать", "/search"]
+          next: chat
+      - - text: "🚫 Пожаловаться"
+          action: report
+          aliases: ["/report", "пожаловаться"]
+          next: chat
+    pos:
+      x: 1280
+      y: 0
+
+  undelivered:
+    title: "Собеседник недоступен"
+    on: undeliverable
+    text: |-
+      ❌ Собеседник недоступен, диалог закончен.
+      Отправь /start, чтобы найти нового собеседника.
+    keyboard: reply
+    buttons_from: main
+    pos:
+      x: 1280
+      y: 180
+
+  premium:
+    title: "Премиум: тарифы"
+    text: |-
+      ⚡ Временная акция, скидка 99%:
+
+      🍓 Настройка поиска: например, только девушки младше 25 лет
+      💋 Комнаты для общения по тематике: флирт, знакомства
+      📹 Отправка и получение любых фото, видео и голосовых без ограничений
+      🔝 Первое место в поиске
+      🚫 Никакой рекламы
+    image: "images/premium.png"
+    keyboard: inline
+    # Ссылка оплаты личная, подставляется кодом вместо {premium_url}; ?plan= добавляется по полю plan.
+    buttons:
+      - - text: "🎁 Пробный 3 дня — 1 ₽"
+          url: "{premium_url}"
+          plan: trial
+      - - text: "Неделя — 299 ₽"
+          url: "{premium_url}"
+          plan: week
+        - text: "Месяц — 999 ₽"
+          url: "{premium_url}"
+          plan: month
+      - - text: "Год — 2999 ₽"
+          url: "{premium_url}"
+          plan: year
+    handler: premium_offer
+    pos:
+      x: 320
+      y: 360
+
+  rooms:
+    title: "Выбор города"
+    text: "📍 Выберите город, в котором хотите искать собеседников:"
+    keyboard: inline
+    handler: rooms
+    options:
+      callback: "room:{key}"
+      rows: [[msk, spb], [nsk, ekb], [kzn, nnov], [any]]
+      items:
+        msk: "Москва"
+        spb: "Санкт-Петербург"
+        nsk: "Новосибирск"
+        ekb: "Екатеринбург"
+        kzn: "Казань"
+        nnov: "Нижний Новгород"
+        any: "Любой город"
+      default: spb
+      selected_mark: "✅"
+    pos:
+      x: 640
+      y: 0
+
+  settings:
+    title: "Настройка поиска: пол"
+    text: |-
+      💎 Только для Премиум-пользователей
+
+      👱‍♀️👱 Пожалуйста, выберите желаемый пол собеседника:
+
+      🔍 Бот будет искать собеседников только с заданными параметрами поиска
+    keyboard: inline
+    next: age
+    handler: settings
+    options:
+      callback: "gender:{key}"
+      rows: [[female, male], [any]]
+      items:
+        female: "👱‍♀️ Женский"
+        male: "👱‍♂️ Мужской"
+        any: "Не важно"
+      selected_mark: "✅"
+      styles:
+        female: primary
+        male: primary
+    pos:
+      x: 640
+      y: 180
+
+  age:
+    title: "Настройка поиска: возраст"
+    text: |-
+      ✏️ Введите желаемый возраст собеседника
+
+      ℹ️ Вы можете настроить поиск "от 26" введя "26+", или указать диапазон поиска, например, "24-34"
+    keyboard: reply
+    buttons_from: dating
+    pos:
+      x: 960
+      y: 0
+
+  notice:
+    title: "Уведомление (рассылка)"
+    on: notice
+    pos:
+      x: 1280
+      y: 360
+
+# Служебные тексты, тосты и шаблоны. {поля} подставляет код.
+texts:
+  searching: "🔎 Ищем собеседника..."
+  no_partners: "Сейчас собеседников нет, приходите чуть позже 😔"
+  stopped: "Диалог остановлен. Отправь /start, чтобы начать снова."
+  report_sent: "Жалоба отправлена. Спасибо, что сообщили."
+  service_down: "Сервис временно недоступен. Попробуй через минуту."
+  media_failed: "Не получилось сохранить медиа. Отправь ещё раз."
+  media_premium: "Чтобы отправлять медиа, получите премиум 👇"
+  partner_no_premium: "Собеседник без премиума не может получать медиа"
+  premium_url: "https://pay.chatwithyou.site/"
+  premium_active: "💎 Премиум активен"
+  premium_active_until: "💎 Премиум активен до {date}"
+  partner_message: |-
+    👤 Собеседник:
+    {text}
+  toast_city: "Город: {city}"
+  toast_cities_refreshed: "Список обновлён — выберите город"
+  dev_notice:
+    text: "Уведомление из заглушки. Клавиатура диалога не меняется."
+    dev: true
+
+# Меню команд Telegram (/start, /next, /stop). dev: true — только при DEV=true.
+commands:
+  - command: start
+    description: "Найти собеседника"
+    action: start
+  - command: next
+    description: "Следующий собеседник"
+    action: next
+  - command: stop
+    description: "Закончить диалог"
+    action: stop
+  - command: dev_leave
+    description: "DEV: собеседник уходит"
+    action: dev_leave
+    dev: true
+  - command: dev_notice
+    description: "DEV: тестовая рассылка"
+    action: dev_notice
+    dev: true

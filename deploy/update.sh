@@ -60,7 +60,7 @@ docker logout >/dev/null 2>&1 || true
 compose up -d --force-recreate --remove-orphans
 
 sleep 10
-docker logs dating-tg-bot --tail 30 2>&1 | grep -E "Бот @|Читаю события|WebSocket|Не задан|Unauthorized|ERROR|Traceback" || true
+docker logs dating-tg-bot --tail 30 2>&1 | grep -E "Бот @|flow загружен|FlowError|Читаю события|WebSocket|Не задан|Unauthorized|ERROR|Traceback" || true
 restarts=$(docker inspect -f '{{.RestartCount}}' dating-tg-bot)
 running=$(docker inspect -f '{{.State.Running}}' dating-tg-bot)
 if [ "$running" != "true" ] || [ "$restarts" -gt 0 ]; then

@@ -12,8 +12,10 @@ from aiogram import F, Router
 from aiogram.enums import ChatType
 from aiogram.types import CallbackQuery, Message
 
+from app import flow
 from app.api_client import ChatApiError, NotChattingError, chat_api
 from app.config import DEV
+from app.flow import ACTION_PREFIX, GOTO_PREFIX
 from app.gateway import gateway
 from app.media import has_tg_media, store_tg_media
 from app.mock_api import MockChatApi
@@ -21,37 +23,22 @@ from app.paylink import premium_offer
 from app.peer import Peer
 from app.ui import (
     AGE_TEXT,
-    CHAT_BTN_NEXT,
-    CHAT_BTN_STOP,
-    DATING_BTN,
-    DATING_FIND_BTN,
-    DATING_ROOMS_BTN,
-    DATING_SETTINGS_BTN,
     DATING_TEXT,
     DEFAULT_ROOM,
-    DEV_LEAVE_COMMAND,
-    DEV_NOTICE_COMMAND,
     DEV_NOTICE_TEXT,
-    FIND_BTN,
     FOUND_TEXT,
     GENDERS,
-    MAIN_MENU_BTN,
     MEDIA_FAILED_TEXT,
     MEDIA_PREMIUM_TEXT,
     MENU_TEXT,
-    NEW_PARTNER_BTN,
     NO_PARTNERS_TEXT,
     PARTNER_LEFT_TEXT,
     PARTNER_NO_PREMIUM_TEXT,
-    PREMIUM_BTN,
-    PREMIUM_STATUS_BTN,
-    REPORT_BTN,
     REPORT_SENT_TEXT,
     ROOMS,
     ROOMS_TEXT,
     SEARCHING_TEXT,
     SERVICE_DOWN_TEXT,
-    START_BTN,
     STOPPED_TEXT,
     build_rooms_keyboard,
     build_settings_keyboard,
@@ -72,36 +59,31 @@ _AGE_RE = re.compile(
     re.IGNORECASE,
 )
 
-_START_COMMANDS = {"/start", "/search", START_BTN.lower(), NEW_PARTNER_BTN.lower()}
-_NEXT_COMMANDS = {"/next", CHAT_BTN_NEXT.lower()}
-_STOP_COMMANDS = {"/stop", CHAT_BTN_STOP.lower()}
-_REPORT_COMMANDS = {"/report", REPORT_BTN.lower(), "пожаловаться"}
-
-# Нижняя клавиатура Telegram не умеет payload: маршрут определяем по тексту кнопки.
-_BUTTON_ROUTES = {
-    FIND_BTN.lower(): "find",
-    "найти собеседника": "find",
-    DATING_BTN.lower(): "dating",
-    "чат знакомств": "dating",
-    DATING_FIND_BTN.lower(): "dating_find",
-    "пошлый чат": "dating_find",
-    # Старая подпись: у людей может остаться прежняя клавиатура.
-    "❤️ найти девушку": "dating_find",
-    "найти девушку": "dating_find",
-    DATING_ROOMS_BTN.lower(): "dating_rooms",
-    "выбрать город": "dating_rooms",
-    # Старая подпись: у людей может остаться прежняя клавиатура.
-    "🌍 выбрать комнату": "dating_rooms",
-    "выбрать комнату": "dating_rooms",
-    DATING_SETTINGS_BTN.lower(): "dating_settings",
-    "настроить поиск": "dating_settings",
-    MAIN_MENU_BTN.lower(): "main",
-    "главное меню": "main",
-    PREMIUM_STATUS_BTN.lower(): "premium",
-    "премиум статус": "premium",
-    PREMIUM_BTN.lower(): "premium",
-    "купить премиум": "premium",
-}
+# Действия, которые код умеет выполнять. Кнопка или команда во flow.yaml с другим action — ошибка CI.
+ACTIONS = frozenset(
+    {
+        "start",
+        "next",
+        "stop",
+        "report",
+        "find",
+        "dating",
+        "dating_find",
+        "dating_rooms",
+        "dating_settings",
+        "main",
+        "premium",
+        "dev_leave",
+        "dev_notice",
+    }
+)
+# Пока человек вводит возраст, эти действия (и любая /команда) прерывают ввод и выполняются как обычно.
+# Остальное (подписи «Следующий собеседник», «Закончить диалог», «Пожаловаться») получает подсказку про возраст.
+_AGE_PASSTHROUGH = frozenset(
+    {"start", "find", "dating", "dating_find", "dating_rooms", "dating_settings", "main", "premium"}
+)
+# Сколько экранов подряд по полю next отправляется за один переход (защита от цикла).
+_MAX_SCREEN_CHAIN = 8
 
 router = Router(name="chat")
 router.message.filter(F.chat.type == ChatType.PRIVATE)
@@ -113,11 +95,6 @@ def _command(text: str) -> str:
     if not lowered.startswith("/"):
         return lowered
     return lowered.split()[0].split("@", 1)[0]
-
-
-def _route(text: str) -> str | None:
-    """Раздел меню по тексту нажатой кнопки. None — обычное сообщение."""
-    return _BUTTON_ROUTES.get(text.strip().lower())
 
 
 def peer_room(peer: Peer) -> str:
@@ -141,20 +118,20 @@ def parse_age(text: str) -> str | None:
 
 async def _handle_dev_command(peer: Peer, text: str) -> bool:
     """DEV: экраны, которые на проде приходят только от собеседника или рассылки."""
-    command = _command(text)
+    action = flow.get().action_for(_command(text))
     mock = cast(MockChatApi, chat_api)
-    if command == DEV_LEAVE_COMMAND:
+    if action == "dev_leave":
         await mock.simulate_partner_left(peer)
         return True
-    if command == DEV_NOTICE_COMMAND:
+    if action == "dev_notice":
         await mock.simulate_notice(peer, DEV_NOTICE_TEXT)
         return True
     return False
 
 
-async def handle_stop(peer: Peer, command: str, active: bool) -> bool:
+async def handle_stop(peer: Peer, action: str | None, active: bool) -> bool:
     """Заканчивает диалог или поиск и возвращает основное меню."""
-    if command not in _STOP_COMMANDS:
+    if action != "stop":
         return False
     if active:
         await chat_api.stop(peer)
@@ -164,9 +141,9 @@ async def handle_stop(peer: Peer, command: str, active: bool) -> bool:
     return True
 
 
-async def handle_next(peer: Peer, command: str, searching: bool) -> bool:
+async def handle_next(peer: Peer, action: str | None, searching: bool) -> bool:
     """Кнопка «Следующий собеседник» запускает новый поиск."""
-    if command not in _NEXT_COMMANDS:
+    if action != "next":
         return False
     if searching:
         await gateway.send(peer, SEARCHING_TEXT, "chat")
@@ -209,13 +186,24 @@ async def handle_incoming(
     handle: str | None = None,
     uploader: Callable[[], Awaitable[str]] | None = None,
 ) -> None:
-    """Маршрутизирует сообщение: старт, меню разделов, настройки, затем диалог."""
+    """Записывает визит и маршрутизирует сообщение."""
     try:
         await chat_api.visit(peer, handle)
     except ChatApiError as exc:
         logger.warning("Не записал визит %s: %s", peer, exc)
+    await _dispatch(peer, text, uploader)
+
+
+async def _dispatch(
+    peer: Peer,
+    text: str,
+    uploader: Callable[[], Awaitable[str]] | None = None,
+) -> None:
+    """Маршрутизирует сообщение: старт, меню разделов, переходы из flow, настройки, затем диалог."""
+    current = flow.get()
     command = _command(text)
-    route = _route(text)
+    action = current.action_for(command)
+    target = current.goto_for(command)
     try:
         if peer in _awaiting_age:
             age = parse_age(text)
@@ -224,41 +212,44 @@ async def handle_incoming(
                 _age_choice[peer] = age
                 await send_premium_gate(peer)
                 return
-            if route is None and command not in _START_COMMANDS and not command.startswith("/"):
+            if action not in _AGE_PASSTHROUGH and target is None and not command.startswith("/"):
                 await gateway.send(peer, AGE_TEXT, "dating")
                 return
             _awaiting_age.discard(peer)
-        if command in _START_COMMANDS:
+        if action == "start":
             await connect_with_partner(peer)
             return
-        if command in _REPORT_COMMANDS:
+        if action == "report":
             await handle_report(peer)
             return
-        if route == "premium":
-            await gateway.send_premium(peer, await premium_offer(peer))
+        if action == "premium":
+            await _show_premium(peer)
             return
-        if route == "find":
+        if action == "find":
             await connect_with_partner(peer)
             return
-        if route == "dating_find":
+        if action == "dating_find":
             await handle_dating_find(peer)
             return
-        if route == "dating":
+        if action == "dating":
             await handle_dating(peer)
             return
-        if route == "dating_rooms":
-            await gateway.send_rooms(peer, peer_room(peer))
+        if action == "dating_rooms":
+            await _show_rooms(peer)
             return
-        if route == "dating_settings":
-            await gateway.send_settings(peer, _gender_choice.get(peer, ""))
+        if action == "dating_settings":
+            await _show_settings(peer)
             return
-        if route == "main":
+        if action == "main":
             await gateway.send(peer, MENU_TEXT, "main")
             return
-        phase = await chat_api.phase(peer)
-        if await handle_stop(peer, command, phase != "idle"):
+        if target is not None:
+            await show_screen(peer, target)
             return
-        if await handle_next(peer, command, phase == "searching"):
+        phase = await chat_api.phase(peer)
+        if await handle_stop(peer, action, phase != "idle"):
+            return
+        if await handle_next(peer, action, phase == "searching"):
             return
         if await handle_chat_line(peer, text, phase == "chatting", uploader):
             return
@@ -269,6 +260,49 @@ async def handle_incoming(
     except ChatApiError as exc:
         logger.warning("Chat API недоступен для %s: %s", peer, exc)
         await gateway.send(peer, SERVICE_DOWN_TEXT, "main")
+
+
+async def _show_premium(peer: Peer) -> None:
+    await gateway.send_premium(peer, await premium_offer(peer))
+
+
+async def _show_rooms(peer: Peer) -> None:
+    await gateway.send_rooms(peer, peer_room(peer))
+
+
+async def _show_settings(peer: Peer) -> None:
+    await gateway.send_settings(peer, _gender_choice.get(peer, ""))
+
+
+# Экраны с handler рисует код: во flow.yaml для них описаны текст, картинка и варианты.
+_HANDLER_RUNNERS: dict[str, Callable[[Peer], Awaitable[None]]] = {
+    "premium_offer": _show_premium,
+    "rooms": _show_rooms,
+    "settings": _show_settings,
+}
+HANDLERS = frozenset(_HANDLER_RUNNERS)
+
+
+async def show_screen(peer: Peer, screen_id: str) -> None:
+    """Показывает экран из flow (переход goto). Экран с handler рисует код, остальные общий рендер.
+
+    Если у экрана без handler есть next, следом сразу уходит следующий экран; цикл обрывается.
+    """
+    current = flow.get()
+    seen: set[str] = set()
+    next_id: str | None = screen_id
+    while next_id is not None and next_id not in seen and len(seen) < _MAX_SCREEN_CHAIN:
+        seen.add(next_id)
+        screen = current.screen(next_id)
+        if screen.handler is not None:
+            runner = _HANDLER_RUNNERS.get(screen.handler)
+            if runner is None:
+                logger.warning("Нет обработчика %s для экрана %s", screen.handler, next_id)
+                return
+            await runner(peer)
+            return
+        await gateway.send_screen(peer, next_id)
+        next_id = screen.next
 
 
 @router.message()
@@ -295,16 +329,25 @@ async def on_message(message: Message) -> None:
 
 @router.callback_query()
 async def on_callback(callback: CallbackQuery) -> None:
-    """Inline-кнопки комнат и пола. Галочку переносим в том же сообщении."""
+    """Inline-кнопки городов, пола и переходов из flow. Галочку переносим в том же сообщении."""
     if callback.from_user is None or callback.from_user.is_bot:
         return
     peer = Peer(str(callback.bot.id), callback.from_user.id)
     data = callback.data or ""
     try:
-        if data.startswith("room:"):
-            await choose_room(peer, callback, data.removeprefix("room:"))
-        elif data.startswith("gender:"):
-            await choose_gender(peer, callback, data.removeprefix("gender:"))
+        current = flow.get()
+        rooms_prefix = current.screen("rooms").options.prefix
+        gender_prefix = current.screen("settings").options.prefix
+        if data.startswith(rooms_prefix):
+            await choose_room(peer, callback, data.removeprefix(rooms_prefix))
+        elif data.startswith(gender_prefix):
+            await choose_gender(peer, callback, data.removeprefix(gender_prefix))
+        elif data.startswith(GOTO_PREFIX) and data.removeprefix(GOTO_PREFIX) in current.screens:
+            await callback.answer()
+            await show_screen(peer, data.removeprefix(GOTO_PREFIX))
+        elif data.startswith(ACTION_PREFIX) and current.token_for(data.removeprefix(ACTION_PREFIX)):
+            await callback.answer()
+            await _dispatch(peer, current.token_for(data.removeprefix(ACTION_PREFIX)) or "")
         else:
             await callback.answer()
     except Exception:  # ошибка кнопки не должна ронять polling
@@ -320,7 +363,7 @@ async def choose_room(peer: Peer, callback: CallbackQuery, room: str) -> None:
                 await callback.message.edit_text(ROOMS_TEXT, reply_markup=build_rooms_keyboard(peer_room(peer)))
             except Exception as exc:  # noqa: BLE001 — старое сообщение можно и не обновить
                 logger.warning("Не обновил старый список %s: %s: %s", peer, type(exc).__name__, exc)
-        await callback.answer(text="Список обновлён — выберите город")
+        await callback.answer(text=flow.get().text("toast_cities_refreshed"))
         return
     changed = _room_choice.get(peer) != room
     _room_choice[peer] = room
@@ -329,7 +372,7 @@ async def choose_room(peer: Peer, callback: CallbackQuery, room: str) -> None:
             await callback.message.edit_reply_markup(reply_markup=build_rooms_keyboard(room))
         except Exception as exc:  # noqa: BLE001 — клавиатуру можно и не обновить
             logger.warning("Не обновил город %s: %s: %s", peer, type(exc).__name__, exc)
-    await callback.answer(text=f"Город: {ROOMS[room]}")
+    await callback.answer(text=flow.get().text("toast_city", city=ROOMS[room]))
 
 
 async def choose_gender(peer: Peer, callback: CallbackQuery, gender: str) -> None:

@@ -7,8 +7,14 @@ import unittest
 
 os.environ["DEV"] = "false"
 
-from app.handlers import _route  # noqa: E402
+from app import flow  # noqa: E402
+from app.handlers import _command  # noqa: E402
 from app.ui import DATING_FIND_BTN, DATING_KEYBOARD  # noqa: E402
+
+
+def _route(text: str) -> str | None:
+    """Раздел меню по тексту кнопки: теперь это action из flow.yaml (прежние имена маршрутов сохранены)."""
+    return flow.get().action_for(_command(text))
 
 
 class HotChatButtonTests(unittest.TestCase):

@@ -8,9 +8,16 @@ from unittest.mock import AsyncMock, MagicMock
 
 os.environ["DEV"] = "false"
 
-from app.handlers import _route, choose_room  # noqa: E402
+from app import flow  # noqa: E402
+from app.handlers import _command, choose_room  # noqa: E402
 from app.peer import Peer  # noqa: E402
 from app.ui import DATING_KEYBOARD, DATING_ROOMS_BTN, DEFAULT_ROOM, ROOMS, build_rooms_keyboard  # noqa: E402
+
+
+def _route(text: str) -> str | None:
+    """Раздел меню по тексту кнопки: теперь это action из flow.yaml (прежние имена маршрутов сохранены)."""
+    return flow.get().action_for(_command(text))
+
 
 CITIES = ["Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург", "Казань", "Нижний Новгород", "Любой город"]
 

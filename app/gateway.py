@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from pathlib import Path
 from typing import Literal
 
 from aiogram import Bot
 from aiogram.exceptions import TelegramBadRequest, TelegramForbiddenError, TelegramRetryAfter
 from aiogram.types import BufferedInputFile, InlineKeyboardMarkup, ReplyKeyboardMarkup
 
+from app import flow
 from app.api_types import PremiumLink
 from app.peer import Peer
 from app.ui import (
@@ -22,6 +22,7 @@ from app.ui import (
     PREMIUM_STATUS_TEXT,
     ROOMS_TEXT,
     SETTINGS_TEXT,
+    build_markup,
     build_premium_keyboard,
     build_rooms_keyboard,
     build_settings_keyboard,
@@ -40,20 +41,6 @@ _KEYBOARDS: dict[str, ReplyKeyboardMarkup | None] = {
     "dating": DATING_KEYBOARD,
     "notice": None,
 }
-
-_ASSETS = Path(__file__).resolve().parent / "assets"
-_ASSETS_CACHE: dict[str, bytes] = {}
-
-
-def _asset(name: str) -> bytes | None:
-    """Картинка из `app/assets`. Файла нет — None: текст важнее баннера."""
-    if name not in _ASSETS_CACHE:
-        try:
-            _ASSETS_CACHE[name] = (_ASSETS / name).read_bytes()
-        except OSError as exc:
-            logger.warning("Нет картинки %s: %s", name, exc)
-            _ASSETS_CACHE[name] = b""
-    return _ASSETS_CACHE[name] or None
 
 
 class NeedBytes(Exception):
@@ -102,7 +89,7 @@ class Gateway:
 
     async def send_greeting(self, peer: Peer) -> bool:
         """Приветствие с баннером, текстом и нижней клавиатурой одним сообщением."""
-        sent = await self._send_photo(peer, "greeting.jpg", GREETING, IDLE_KEYBOARD)
+        sent = await self._send_photo(peer, "main", GREETING, IDLE_KEYBOARD)
         if sent is not None:
             return sent
         return await self.send(peer, GREETING, "main")
@@ -116,10 +103,24 @@ class Gateway:
             markup = build_premium_keyboard(offer.url, trial=False)
             return await self._send_text(peer, format_premium_active(offer.premium_until), markup)
         markup = build_premium_keyboard(offer.url)
-        sent = await self._send_photo(peer, "premium.png", PREMIUM_STATUS_TEXT, markup)
+        sent = await self._send_photo(peer, "premium", PREMIUM_STATUS_TEXT, markup)
         if sent is not None:
             return sent
         return await self._send_text(peer, PREMIUM_STATUS_TEXT, markup)
+
+    async def send_screen(self, peer: Peer, screen_id: str) -> bool:
+        """Экран из flow без собственного кода: текст, картинка (подпись) и клавиатура из описания."""
+        screen = flow.get().screen(screen_id)
+        text = screen.text or ""
+        markup = build_markup(screen_id)
+        if screen.image:
+            sent = await self._send_photo(peer, screen_id, text, markup)
+            if sent is not None:
+                return sent
+        if not text:
+            logger.warning("Экран %s без текста, отправлять нечего", screen_id)
+            return True
+        return await self._send_text(peer, text, markup)
 
     async def send_pay_button(self, peer: Peer, text: str, url: str) -> bool:
         """Короткий текст и кнопка оплаты. Нижняя клавиатура остаётся прежней."""
@@ -136,14 +137,15 @@ class Gateway:
     async def _send_photo(
         self,
         peer: Peer,
-        name: str,
+        screen_id: str,
         caption: str,
-        markup: ReplyKeyboardMarkup | InlineKeyboardMarkup,
+        markup: ReplyKeyboardMarkup | InlineKeyboardMarkup | None,
     ) -> bool | None:
-        """Фото с подписью и кнопками. None — фото не ушло, нужен текстовый фолбэк."""
-        photo = _asset(name)
+        """Картинка экрана с подписью и кнопками. None — фото не ушло, нужен текстовый фолбэк."""
+        photo = flow.get().image(screen_id)
         if photo is None:
             return None
+        name = flow.get().screen(screen_id).image.rsplit("/", 1)[-1]
         if self._bot is None:
             raise RuntimeError("Бот Telegram ещё не запущен")
         for attempt in range(2):
