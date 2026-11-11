@@ -31,3 +31,11 @@ Use subagents for delegated work, not new user-facing chats. Give each developer
 Тонкий Telegram-клиент общего Chat API. Отвечает за команды, клавиатуры, баннеры и доставку; очередь и пары принадлежат vk-bot.
 
 Локальный комплект работает и при отдельном checkout. Если рядом есть общая папка workspace `../.ai/`, используй её для межсервисного контекста и обновляй при изменении общих контрактов. Её отсутствие не блокирует локальную работу.
+
+## Flow бота (flow/flow.yaml)
+
+Пользовательские тексты, кнопки, клавиатуры, картинки, переходы и меню команд меняются только в `flow/flow.yaml` (картинки — `flow/images`). Новое action/handler/on регистрируется одновременно в коде (`ACTIONS`/`HANDLERS` в `app/handlers.py`, `EVENTS` в `app/events.py`) и во flow, иначе CI красный. Формат flow — контракт с CRM «Постдеск»: ломающие изменения только с повышением `version` в `flow/flow.schema.json`.
+
+- В `app/*.py` нет кириллических пользовательских строк: это проверяет `tests/test_no_ui_literals.py` (исключения — только в его `ALLOWLIST` с причиной).
+- Проверка перед коммитом: `python -m app.flow` и `python -m unittest discover -s tests -v`.
+- Кнопка `goto: <экран>` и экран без `handler` работают без правок кода (общий рендер, `next` отправляет следующий экран).

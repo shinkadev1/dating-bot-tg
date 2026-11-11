@@ -11,12 +11,13 @@ Telegram → aiogram handlers → HTTPS Chat API через Cloudflare Access. �
 | Путь | Ответственность |
 | --- | --- |
 | `app/main.py` | Запуск aiogram и потребителей событий. |
-| `app/handlers.py` | Команды, поиск, премиум-промо, комнаты и настройки. |
-| `app/ui.py` | Тексты, reply/inline клавиатуры, ссылки. |
+| `app/handlers.py` | Маршрутизация по `flow.action_for`, реестры `ACTIONS`/`HANDLERS`, переходы goto, поиск, премиум, города, настройки. |
+| `app/flow.py` | Загрузка и проверка `flow/flow.yaml` по `flow/flow.schema.json`; `python -m app.flow`. |
+| `app/ui.py` | Сборка клавиатур aiogram из flow; прежние публичные имена (`GREETING`, `IDLE_KEYBOARD`, `ROOMS` …). |
 | `app/gateway.py` | Отправка ответов, баннеров и медиа. |
 | `app/api_client.py` | REST Chat API. |
 | `app/api_types.py` | Типы API. |
-| `app/events.py` | WebSocket-события и рассылки. |
+| `app/events.py` | WebSocket-события и рассылки; реестр `EVENTS`. |
 | `app/media.py` | Telegram-медиа и ссылки на файлы. |
 | `app/paylink.py` | Личная ссылка оплаты премиума из Chat API, запасная `PREMIUM_URL`. |
 | `app/mock_api.py` | In-memory заглушка REST/событий. |
@@ -29,8 +30,12 @@ Telegram → aiogram handlers → HTTPS Chat API через Cloudflare Access. �
 - Комнаты, пол и возраст находятся в памяти процесса, не влияют на серверный подбор.
 - Сохранять ack событий, переподключение и раздельную обработку notice и сообщений собеседника.
 
+## Flow
+
+`flow/flow.yaml` описывает экраны (`title`, `pos`, `text`, `image`, `buttons`, `next`, `handler`, `on`, `options`), служебные `texts` и меню `commands`; `flow/images/` — картинки. Схема `flow/flow.schema.json` (version 1) общая с ботом ВК и читается CRM «Постдеск». Код регистрирует `ACTIONS`, `HANDLERS`, `EVENTS`; их равенство набору во flow проверяют тесты и CI. Бот не стартует с битым flow (`FlowError`).
+
 ## Развёртывание
 
-Push в `master` запускает `.github/workflows/deploy.yml`; серверное обновление — `deploy/update.sh`.
+Push в `master` запускает `.github/workflows/deploy.yml`: job `validate` (`python -m app.flow`, unittest) → `publish` → `deploy`; серверное обновление — `deploy/update.sh`. Образ копирует `flow/` в `/app/flow`.
 
 Схема описывает репозиторий, а не подтверждённое состояние production.

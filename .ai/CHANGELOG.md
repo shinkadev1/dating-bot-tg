@@ -16,6 +16,10 @@
 
 Кнопки «Купить премиум» (промо, гейт «Найти девушку», ответ на медиа без премиума) открывают личную ссылку из `GET /api/v1/peers/tg/{bot_key}/{user_id}/premium/link` (vk-bot, ветка payments) вместо постоянной `PREMIUM_URL`. Ссылка действует 24 часа, запрашивается на каждый показ и уходит только inline-кнопкой, не текстом. При ошибке или 503 — предупреждение в лог и постоянная `PREMIUM_URL`; DEV-заглушка всегда отвечает как 503. С активным премиумом бот показывает срок (дата по UTC+3) вместо продажи; отказ медиа при активном премиуме у автора объясняется отсутствием премиума у собеседника. Ветка `paylink`, файлы: `app/api_client.py`, `app/api_types.py`, `app/mock_api.py`, `app/paylink.py`, `app/ui.py`, `app/gateway.py`, `app/handlers.py`, `tests/test_paylink.py`. Проверки: `python -m unittest discover -s tests` — 12 тестов OK; `compileall app tests` OK. Не проверено: настоящий Chat API и Telegram.
 
+## 2026-11-11 — flow/flow.yaml
+
+Пользовательские тексты, кнопки, клавиатуры, картинки, переходы и меню команд бота переехали в `flow/flow.yaml` (+ `flow/flow.schema.json`, `flow/images`): CRM «Постдеск» читает и правит файл в GitHub и рисует карту бота. Поведение для пользователя не менялось: эквивалентность подтверждена снимком кода до перехода (`tests/fixtures/ui_snapshot.json`). Новое: `app/flow.py` (загрузка, схема, проверки), общий рендер экранов goto/next без кода, реестры `ACTIONS`/`HANDLERS`/`EVENTS`, тест «нет пользовательских литералов в коде», job `validate` в CI. Файлы: `app/flow.py`, `app/ui.py`, `app/handlers.py`, `app/gateway.py`, `app/events.py`, `app/main.py`, `flow/`, `tests/`, `Dockerfile`, `requirements.txt`, `.github/workflows/deploy.yml`, `deploy/update.sh`. Проверки: `python -m app.flow`, `python -m unittest discover -s tests -v`. Не проверено: docker build, деплой.
+
 ## Формат следующих записей
 
 Дата, изменение и причина, затронутые контракты, коммит/файлы и реальные проверки. Текущие планы хранить в CURRENT_TASK; актуальные ограничения — в STATE.
