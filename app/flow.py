@@ -10,7 +10,9 @@ from __future__ import annotations
 import json
 import logging
 import re
+import string
 import sys
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -30,6 +32,15 @@ CAPTION_MAX = 1024
 # Префиксы callback_data у кнопок, которые строит общий рендер экрана.
 GOTO_PREFIX = "go:"
 ACTION_PREFIX = "act:"
+
+# Шаблоны texts: ключ -> поля {имя}, которые подставляет код. Текст ключа должен содержать ровно эти
+# поля; у остальных ключей полей нет. Новому шаблону сначала нужна запись здесь и код, который его
+# заполняет, иначе FlowError при загрузке (а не при показе пользователю).
+TEXT_FIELDS: dict[str, frozenset[str]] = {
+    "premium_active_until": frozenset({"date"}),
+    "partner_message": frozenset({"text"}),
+    "toast_city": frozenset({"city"}),
+}
 
 
 class FlowError(Exception):
@@ -186,6 +197,31 @@ class Flow:
     def commands(self, dev: bool = False) -> list[Command]:
         return [c for c in self._commands if dev or not c.dev]
 
+    def check_registries(
+        self,
+        *,
+        actions: Iterable[str],
+        handlers: Iterable[str],
+        events: Iterable[str],
+    ) -> None:
+        """Сверяет action/handler/on из flow с реестрами кода в обе стороны; расхождение — FlowError.
+
+        Лишнее во flow бот не умеет выполнять, лишнее в коде нигде не вызывается из карты.
+        """
+        diffs = []
+        for name, in_flow, in_code in (
+            ("actions", self.actions(), frozenset(actions)),
+            ("handlers", self.handlers(), frozenset(handlers)),
+            ("events", self.events(), frozenset(events)),
+        ):
+            if in_flow != in_code:
+                diffs.append((name, sorted(in_flow - in_code), sorted(in_code - in_flow)))
+        if diffs:
+            raise FlowError(
+                "flow не совпадает с реестрами кода; "
+                + "; ".join(f"{name}: только во flow {a}, только в коде {b}" for name, a, b in diffs)
+            )
+
 
 # ---------------------------------------------------------------- загрузка
 
@@ -271,7 +307,27 @@ def _build_options(raw: dict[str, Any]) -> Options:
     )
 
 
-def load(path: Path | str | None = None) -> Flow:
+def _check_texts(texts: Mapping[str, str], text_fields: Mapping[str, frozenset[str]]) -> None:
+    """Шаблоны texts: поля {имя} совпадают с объявленными для ключа, пробная подстановка проходит."""
+    formatter = string.Formatter()
+    for key, template in texts.items():
+        where = f"texts.{key}"
+        try:
+            found = {name for _, name, _, _ in formatter.parse(template) if name is not None}
+        except ValueError as exc:
+            raise FlowError(f"{where}: неверный шаблон: {exc}") from exc
+        expected = text_fields.get(key, frozenset())
+        if found - expected:
+            raise FlowError(f"{where}: неизвестные поля {sorted(found - expected)}")
+        if expected - found:
+            raise FlowError(f"{where}: нет полей {sorted(expected - found)}")
+        try:
+            template.format(**{name: "x" for name in expected})
+        except (KeyError, IndexError, ValueError, AttributeError) as exc:
+            raise FlowError(f"{where}: шаблон не форматируется: {exc!r}") from exc
+
+
+def load(path: Path | str | None = None, *, text_fields: Mapping[str, frozenset[str]] | None = None) -> Flow:
     """Читает и проверяет flow.yaml. Картинки ищутся относительно каталога файла."""
     flow_path = Path(path) if path is not None else FLOW_DIR / "flow.yaml"
     try:
@@ -334,6 +390,8 @@ def load(path: Path | str | None = None) -> Flow:
             raise FlowError(f"{where}.text: подпись к картинке длиннее {CAPTION_MAX} символов")
         if screen.options:
             options = screen.options
+            if screen.handler is None:
+                raise FlowError(f"{where}.options: экран с вариантами рисует код, нужен handler")
             if "{key}" not in options.callback:
                 raise FlowError(f"{where}.options.callback: нет {{key}}")
             for key in options.items:
@@ -387,6 +445,7 @@ def load(path: Path | str | None = None) -> Flow:
                 dev_texts.add(key)
         else:
             texts[key] = value
+    _check_texts(texts, TEXT_FIELDS if text_fields is None else text_fields)
 
     return Flow(
         version=data["version"],
@@ -418,6 +477,10 @@ def get() -> Flow:
 def main() -> int:
     try:
         current = load()
+        # Реестры живут в коде бота: импортируем после загрузки, чтобы ошибка самого flow была видна первой.
+        from app import events, handlers
+
+        current.check_registries(actions=handlers.ACTIONS, handlers=handlers.HANDLERS, events=events.EVENTS)
     except FlowError as exc:
         print(f"FlowError: {exc}", file=sys.stderr)
         return 1

@@ -148,6 +148,52 @@ class GotoTests(unittest.IsolatedAsyncioTestCase):
         cb.answer.assert_awaited_once()
         self.bot.send_photo.assert_awaited_once()
 
+    async def test_inline_action_runs_directly_while_age_is_awaited(self) -> None:
+        """act:next/stop/report не превращаются в подсказку про возраст."""
+        self.api.stop = AsyncMock()
+        self.api.search = AsyncMock(return_value="searching")
+        self.api.phase.return_value = "chatting"
+        handlers._awaiting_age.add(PEER)
+        await handlers.on_callback(self.callback("act:stop"))
+        self.api.stop.assert_awaited_once()
+        texts = [c.args[1] for c in self.bot.send_message.call_args_list]
+        self.assertNotIn(handlers.AGE_TEXT, texts)
+        self.assertIn(handlers.STOPPED_TEXT, texts)
+        self.assertIn(PEER, handlers._awaiting_age)
+
+        self.bot.send_message.reset_mock()
+        self.api.phase.return_value = "idle"
+        await handlers.on_callback(self.callback("act:next"))
+        self.api.search.assert_awaited_once()
+        self.assertNotIn(handlers.AGE_TEXT, [c.args[1] for c in self.bot.send_message.call_args_list])
+
+        self.bot.send_message.reset_mock()
+        await handlers.on_callback(self.callback("act:report"))
+        self.assertIn(handlers.REPORT_SENT_TEXT, [c.args[1] for c in self.bot.send_message.call_args_list])
+
+    async def test_inline_passthrough_action_cancels_age_wait(self) -> None:
+        handlers._awaiting_age.add(PEER)
+        await handlers.on_callback(self.callback("act:premium"))
+        self.assertNotIn(PEER, handlers._awaiting_age)
+
+    async def test_inline_dev_action_only_in_dev(self) -> None:
+        mock = MagicMock()
+        mock.simulate_partner_left = AsyncMock()
+        with patch.object(handlers, "chat_api", mock):
+            with patch.object(handlers, "DEV", False):
+                await handlers.on_callback(self.callback("act:dev_leave"))
+                mock.simulate_partner_left.assert_not_called()
+            with patch.object(handlers, "DEV", True):
+                await handlers.on_callback(self.callback("act:dev_leave"))
+                mock.simulate_partner_left.assert_awaited_once()
+
+    async def test_inline_unknown_action_only_answers(self) -> None:
+        cb = self.callback("act:fly")
+        await handlers.on_callback(cb)
+        cb.answer.assert_awaited_once()
+        self.bot.send_message.assert_not_called()
+        self.bot.send_photo.assert_not_called()
+
     async def test_gateway_screen_without_text_and_image_is_skipped(self) -> None:
         with self.assertLogs("app.gateway", "WARNING"):
             await self.real_gateway.send_screen(PEER, "notice")

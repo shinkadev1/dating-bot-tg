@@ -226,6 +226,37 @@ class BrokenFlowTests(unittest.TestCase):
         data["screens"]["main"]["buttons"][0] = [{"text": f"b{i}", "goto": "chat"} for i in range(9)]
         self.assert_error(data, "buttons[0]")
 
+    def test_unknown_handler_is_flow_error_at_registry_check(self) -> None:
+        data = base_data()
+        data["screens"]["rooms"]["handler"] = "nowhere"
+        loaded = flow.load(self.write(data))
+        with self.assertRaises(flow.FlowError):
+            loaded.check_registries(actions=handlers.ACTIONS, handlers=handlers.HANDLERS, events=events.EVENTS)
+
+    def test_options_screen_needs_handler(self) -> None:
+        data = base_data()
+        del data["screens"]["rooms"]["handler"]
+        self.assert_error(data, "screens.rooms.options", "handler")
+
+    def test_unknown_text_field_is_flow_error(self) -> None:
+        data = base_data()
+        data["texts"]["toast_city"] = "Город: {dat}"
+        self.assert_error(data, "texts.toast_city", "dat")
+        data = base_data()
+        data["texts"]["searching"] = "Ищем {who}"
+        self.assert_error(data, "texts.searching", "who")
+
+    def test_missing_text_field_and_bad_template(self) -> None:
+        data = base_data()
+        data["texts"]["partner_message"] = "Собеседник"
+        self.assert_error(data, "texts.partner_message", "text")
+        data = base_data()
+        data["texts"]["searching"] = "Ищем {"
+        self.assert_error(data, "texts.searching")
+        data = base_data()
+        data["texts"]["searching"] = "Ищем {0}"
+        self.assert_error(data, "texts.searching")
+
     def test_on_key_stays_a_string(self) -> None:
         """В YAML 1.1 on — булево значение; загрузчик flow его не превращает."""
         self.assertEqual(flow.load(self.write(FLOW_YAML.read_text(encoding="utf-8"))).screens["chat"].on, "partner_found")

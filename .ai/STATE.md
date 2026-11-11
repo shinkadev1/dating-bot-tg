@@ -32,3 +32,5 @@
 ## Flow (ветка loop/bot-flow-yaml, 2026-11-11)
 
 Тексты, кнопки, клавиатуры, картинки, переходы и меню команд вынесены в `flow/flow.yaml` (11 экранов, 15 текстов), схема `flow/flow.schema.json`, картинки в `flow/images/` (перенесены из `app/assets`). Проверено локально (Python 3.13, venv): `python -m app.flow` → exit 0; `python -m unittest discover -s tests` зелёный, включая сверку со снимком кода до перехода (1254 входящих сценария, клавиатуры, команды, события, sha256 картинок). Не проверено: `docker build` (демон Docker не запущен), CI и деплой, реальный Telegram и Chat API. Слияние и деплой выполняет цикл LoopOS.
+
+Доработка по ревью (2026-11-11): `act:` из inline-кнопок идёт прямо в раннер действия (без AGE_TEXT, dev только при DEV); `check_registries` при старте и в `python -m app.flow`; проверка шаблонов texts (`TEXT_FIELDS`); экран с options требует handler; aiogram закреплён на `>=3.31,<3.32`. Тесты: 85 OK. Не проверено: CI, docker build, реальный Telegram.

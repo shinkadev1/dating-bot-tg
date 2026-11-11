@@ -12,9 +12,9 @@ from aiogram.types import BotCommand
 from app import flow
 from app.api_client import ChatApiError, chat_api
 from app.config import CHAT_API_TG_TOKEN, CHAT_API_URL, DEV, TELEGRAM_BOT_TOKEN
-from app.events import consume_broadcasts, consume_events
+from app.events import EVENTS, consume_broadcasts, consume_events
 from app.gateway import gateway
-from app.handlers import router
+from app.handlers import ACTIONS, HANDLERS, router
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -22,6 +22,7 @@ logger = logging.getLogger("tg_bot")
 
 # Карта читается и проверяется до запуска polling: битый flow.yaml — бот не стартует (FlowError).
 _FLOW = flow.get()
+_FLOW.check_registries(actions=ACTIONS, handlers=HANDLERS, events=EVENTS)
 logger.info("flow загружен: %d экранов, %d текстов", len(_FLOW.screens), len(_FLOW.texts))
 
 _COMMANDS = [BotCommand(command=c.command, description=c.description) for c in _FLOW.commands(DEV)]

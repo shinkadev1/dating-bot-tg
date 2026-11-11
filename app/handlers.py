@@ -59,24 +59,6 @@ _AGE_RE = re.compile(
     re.IGNORECASE,
 )
 
-# Действия, которые код умеет выполнять. Кнопка или команда во flow.yaml с другим action — ошибка CI.
-ACTIONS = frozenset(
-    {
-        "start",
-        "next",
-        "stop",
-        "report",
-        "find",
-        "dating",
-        "dating_find",
-        "dating_rooms",
-        "dating_settings",
-        "main",
-        "premium",
-        "dev_leave",
-        "dev_notice",
-    }
-)
 # Пока человек вводит возраст, эти действия (и любая /команда) прерывают ввод и выполняются как обычно.
 # Остальное (подписи «Следующий собеседник», «Закончить диалог», «Пожаловаться») получает подсказку про возраст.
 _AGE_PASSTHROUGH = frozenset(
@@ -345,9 +327,9 @@ async def on_callback(callback: CallbackQuery) -> None:
         elif data.startswith(GOTO_PREFIX) and data.removeprefix(GOTO_PREFIX) in current.screens:
             await callback.answer()
             await show_screen(peer, data.removeprefix(GOTO_PREFIX))
-        elif data.startswith(ACTION_PREFIX) and current.token_for(data.removeprefix(ACTION_PREFIX)):
+        elif data.startswith(ACTION_PREFIX) and data.removeprefix(ACTION_PREFIX) in _ACTION_RUNNERS:
             await callback.answer()
-            await _dispatch(peer, current.token_for(data.removeprefix(ACTION_PREFIX)) or "")
+            await run_action(peer, data.removeprefix(ACTION_PREFIX))
         else:
             await callback.answer()
     except Exception:  # ошибка кнопки не должна ронять polling
@@ -482,3 +464,59 @@ async def connect_with_partner(peer: Peer) -> None:
         await gateway.send(peer, FOUND_TEXT, "chat")
         return
     _search_timeouts[peer] = asyncio.create_task(_leave_queue_later(peer))
+
+
+async def _run_stop(peer: Peer) -> None:
+    await handle_stop(peer, "stop", await chat_api.phase(peer) != "idle")
+
+
+async def _run_next(peer: Peer) -> None:
+    await handle_next(peer, "next", await chat_api.phase(peer) == "searching")
+
+
+async def _run_main(peer: Peer) -> None:
+    await gateway.send(peer, MENU_TEXT, "main")
+
+
+async def _run_dev_leave(peer: Peer) -> None:
+    await cast(MockChatApi, chat_api).simulate_partner_left(peer)
+
+
+async def _run_dev_notice(peer: Peer) -> None:
+    await cast(MockChatApi, chat_api).simulate_notice(peer, DEV_NOTICE_TEXT)
+
+
+# Действия, которые код умеет выполнять (имя = action во flow.yaml). Inline-кнопка act:<имя> вызывает
+# раннер напрямую, не через текст кнопки. Кнопка или команда с другим action — ошибка CI и старта.
+_ACTION_RUNNERS: dict[str, Callable[[Peer], Awaitable[None]]] = {
+    "start": connect_with_partner,
+    "find": connect_with_partner,
+    "next": _run_next,
+    "stop": _run_stop,
+    "report": handle_report,
+    "dating": handle_dating,
+    "dating_find": handle_dating_find,
+    "dating_rooms": _show_rooms,
+    "dating_settings": _show_settings,
+    "main": _run_main,
+    "premium": _show_premium,
+    "dev_leave": _run_dev_leave,
+    "dev_notice": _run_dev_notice,
+}
+ACTIONS = frozenset(_ACTION_RUNNERS)
+_DEV_ACTIONS = frozenset({"dev_leave", "dev_notice"})
+
+
+async def run_action(peer: Peer, action: str) -> bool:
+    """Inline-кнопка act:<action>: выполняет действие по имени. False — действия нет (или dev вне DEV)."""
+    runner = _ACTION_RUNNERS.get(action)
+    if runner is None or (action in _DEV_ACTIONS and not DEV):
+        return False
+    if action in _AGE_PASSTHROUGH:
+        _awaiting_age.discard(peer)
+    try:
+        await runner(peer)
+    except ChatApiError as exc:
+        logger.warning("Chat API недоступен для %s: %s", peer, exc)
+        await gateway.send(peer, SERVICE_DOWN_TEXT, "main")
+    return True
