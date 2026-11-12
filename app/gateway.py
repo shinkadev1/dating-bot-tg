@@ -108,11 +108,14 @@ class Gateway:
             return sent
         return await self._send_text(peer, PREMIUM_STATUS_TEXT, markup)
 
-    async def send_screen(self, peer: Peer, screen_id: str) -> bool:
-        """Экран из flow без собственного кода: текст, картинка (подпись) и клавиатура из описания."""
+    async def send_screen(self, peer: Peer, screen_id: str, premium_url: str | None = None) -> bool:
+        """Экран из flow без собственного кода: текст, картинка (подпись) и клавиатура из описания.
+
+        premium_url — личная ссылка оплаты для кнопок с {premium_url}.
+        """
         screen = flow.get().screen(screen_id)
         text = screen.text or ""
-        markup = build_markup(screen_id)
+        markup = build_markup(screen_id, premium_url=premium_url)
         if screen.image:
             sent = await self._send_photo(peer, screen_id, text, markup)
             if sent is not None:

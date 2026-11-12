@@ -16,13 +16,14 @@ from app.config import CHAT_API_URL, DEV, EVENTS_CONSUMER, chat_api_headers
 from app.gateway import NeedBytes, gateway
 from app.handlers import cancel_search_timeout
 from app.mock_api import MockChatApi
+from app.paylink import premium_offer
 from app.peer import Peer
 from app.ui import FOUND_TEXT, PARTNER_LEFT_TEXT, UNDELIVERED_TEXT, format_partner
 
 logger = logging.getLogger(__name__)
 
 # События Chat API, которые бот показывает пользователю. Каждое описано экраном с on: во flow.yaml.
-EVENTS = frozenset({"partner_found", "partner_left", "undeliverable", "notice"})
+EVENTS = frozenset({"partner_found", "partner_left", "undeliverable", "notice", "promo"})
 
 _RECONNECT_DELAY_SECONDS = 3.0
 # Живые реплики идут тем же ботом. 10 сообщений/с оставляют запас под диалоги.
@@ -72,6 +73,13 @@ async def _deliver(body: dict) -> None:
             await gateway.send(peer, UNDELIVERED_TEXT, "main")
         else:
             await gateway.send(peer, PARTNER_LEFT_TEXT, "partner_left")
+        return
+    elif kind == "promo":
+        # Промо после каждого 10-го диалога: недоставка не обрывает диалог (его уже нет), поиск не трогаем.
+        offer = await premium_offer(peer)
+        if offer.premium_active:
+            return
+        await gateway.send_screen(peer, "premium_promo", premium_url=offer.url)
         return
     else:
         logger.warning("Неизвестное событие Chat API: %s", kind)

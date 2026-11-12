@@ -17,7 +17,7 @@ Telegram → aiogram handlers → HTTPS Chat API через Cloudflare Access. �
 | `app/gateway.py` | Отправка ответов, баннеров и медиа. |
 | `app/api_client.py` | REST Chat API. |
 | `app/api_types.py` | Типы API. |
-| `app/events.py` | WebSocket-события и рассылки; реестр `EVENTS`. |
+| `app/events.py` | WebSocket-события и рассылки; реестр `EVENTS`. Событие `promo` (после каждого 10-го диалога, нет премиума; не выкачено) → экран `premium_promo` с личной ссылкой; без `delivery_failed`. |
 | `app/media.py` | Telegram-медиа и ссылки на файлы. |
 | `app/paylink.py` | Личная ссылка оплаты премиума из Chat API, запасная `PREMIUM_URL`. |
 | `app/mock_api.py` | In-memory заглушка REST/событий. |
