@@ -116,8 +116,11 @@ async def handle_stop(peer: Peer, action: str | None, active: bool) -> bool:
     if action != "stop":
         return False
     if active:
-        await chat_api.stop(peer)
-        await gateway.send(peer, STOPPED_TEXT, "main")
+        result = await chat_api.stop(peer)
+        if result.promo and not (await premium_offer(peer)).premium_active:
+            await gateway.send_screen(peer, "stopped_promo")
+        else:
+            await gateway.send(peer, STOPPED_TEXT, "main")
         return True
     await gateway.send_greeting(peer)
     return True

@@ -37,4 +37,4 @@
 
 ## Промо после 10 диалогов (ветка loop/promo-every-10, 2026-11-12)
 
-Не выкачено. Chat API (vk-bot) присылает `{"type": "promo", ...}` по `/api/v1/events/tg`; бот проверяет премиум через `premium_offer` и шлёт экран `premium_promo` (картинка premium.png, кнопки «💎 Купить премиум» с личной ссылкой и «🔍 Новый собеседник»). `delivery_failed` и `cancel_search_timeout` не вызываются. Проверено локально: `python -m app.flow` (12 экранов, 15 текстов), `python -m unittest discover -s tests` — 90 OK. Не проверено: реальный Chat API и Telegram, деплой. Порядок выкатки: боты раньше vk-bot.
+Не выкачено. Chat API (vk-bot) ставит `"promo": true` в событие `partner_left` (`/api/v1/events/tg`) и в ответ `POST /stop`; бот проверяет премиум через `premium_offer` (только при флаге) и шлёт экран `partner_left_promo` или `stopped_promo` (картинка premium.png, reply-кнопки «💎 Купить премиум» → экран premium, «🔍 Новый собеседник», в первом ещё «🚫 Пожаловаться»). `delivery_failed` не вызывается. Проверено локально: `python -m app.flow`, `python -m unittest discover -s tests` — 95 OK. Не проверено: реальный Chat API и Telegram, деплой. Порядок выкатки: боты раньше vk-bot.

@@ -30,4 +30,4 @@ Inline-кнопка `act:<действие>` выполняется напрям
 
 ## 2026-11-12 — промо премиума после 10 диалогов (не выкачено)
 
-Событие `promo` в `app/events.py` (EVENTS), экран `premium_promo` во `flow/flow.yaml`, `send_screen(..., premium_url=)` в `app/gateway.py`, тест `tests/test_promo_event.py`. При активном премиуме ничего не отправляется. Проверки: `python -m app.flow`, unittest 90 OK.
+Контракт Chat API: `partner_left` и ответ `POST /stop` могут содержать `"promo": true` (отдельного события promo нет). `StopResult(was_active, promo)` в `api_types.py`; `events.py` и `handle_stop` при флаге без премиума шлют экраны `partner_left_promo` / `stopped_promo` (flow.yaml, картинка premium.png, reply-кнопка «💎 Купить премиум» → экран premium). Экран `premium_promo` и событие `promo` удалены. Тесты: `tests/test_promo_event.py`. Не выкачено; боты выкатываются раньше vk-bot.

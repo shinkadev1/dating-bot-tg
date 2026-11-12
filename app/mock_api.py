@@ -21,7 +21,7 @@ import uuid
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 
-from app.api_types import ChatApiError, NotChattingError, PremiumLink, SendResult
+from app.api_types import ChatApiError, NotChattingError, PremiumLink, SendResult, StopResult
 from app.config import DEV_ECHO, DEV_PARTNER_DELAY, DEV_REPLY_DELAY
 from app.peer import Peer
 
@@ -196,7 +196,7 @@ class MockChatApi:
         self._pending[peer] = self._later(DEV_PARTNER_DELAY, lambda: self._pair_with_mock(peer))
         return "searching"
 
-    async def stop(self, peer: Peer) -> bool:
+    async def stop(self, peer: Peer) -> StopResult:
         self._cancel_pending(peer)
         state = self._state(peer)
         was_active = state.phase != "idle"
@@ -204,7 +204,7 @@ class MockChatApi:
             await self._close(peer, "stopped")
         else:
             state.phase = "idle"
-        return was_active
+        return StopResult(was_active, False)
 
     async def report(self, peer: Peer) -> str:
         if self._state(peer).phase != "chatting":

@@ -31,4 +31,4 @@
 
 ## 2026-11-12 — promo-every-10
 
-Ветка loop/promo-every-10: событие promo и экран premium_promo (см. CHANGELOG). Статус: реализовано локально, не выкачено; серверная часть — в vk-bot.
+Ветка loop/promo-every-10: флаг promo в partner_left и в ответе /stop, экраны partner_left_promo и stopped_promo (см. CHANGELOG). Статус: реализовано локально, не выкачено; серверная часть — в vk-bot.

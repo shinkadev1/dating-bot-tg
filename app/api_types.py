@@ -25,6 +25,14 @@ class SendResult:
 
 
 @dataclass(frozen=True)
+class StopResult:
+    """Итог /stop: был ли поиск или диалог и нужно ли промо премиума (каждый 10-й диалог)."""
+
+    was_active: bool
+    promo: bool
+
+
+@dataclass(frozen=True)
 class PremiumLink:
     """Личная ссылка на оплату (действует 24 часа) и текущий срок премиума."""
 

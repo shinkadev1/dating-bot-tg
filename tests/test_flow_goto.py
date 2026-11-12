@@ -15,7 +15,7 @@ os.environ["DEV"] = "false"
 import yaml  # noqa: E402
 
 from app import flow, handlers  # noqa: E402
-from app.api_types import PremiumLink  # noqa: E402
+from app.api_types import PremiumLink, StopResult  # noqa: E402
 from app.gateway import Gateway  # noqa: E402
 from app.peer import Peer  # noqa: E402
 
@@ -150,7 +150,7 @@ class GotoTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_inline_action_runs_directly_while_age_is_awaited(self) -> None:
         """act:next/stop/report не превращаются в подсказку про возраст."""
-        self.api.stop = AsyncMock()
+        self.api.stop = AsyncMock(return_value=StopResult(True, False))
         self.api.search = AsyncMock(return_value="searching")
         self.api.phase.return_value = "chatting"
         handlers._awaiting_age.add(PEER)

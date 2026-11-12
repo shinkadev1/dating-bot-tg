@@ -7,7 +7,7 @@ from typing import Any
 
 import httpx
 
-from app.api_types import ChatApiError, NotChattingError, NotPremiumError, PremiumLink, SendResult
+from app.api_types import ChatApiError, NotChattingError, NotPremiumError, PremiumLink, SendResult, StopResult
 from app.config import CHAT_API_URL, DEV, chat_api_headers
 from app.mock_api import MockChatApi
 from app.peer import Peer
@@ -57,9 +57,10 @@ class ChatApiClient:
         """Ставит в поиск. Возвращает chatting, если пара нашлась сразу."""
         return (await self._request("POST", peer, "search"))["phase"]
 
-    async def stop(self, peer: Peer) -> bool:
-        """True, если был поиск или диалог."""
-        return (await self._request("POST", peer, "stop"))["was_active"]
+    async def stop(self, peer: Peer) -> StopResult:
+        """was_active — был поиск или диалог; promo — после этого диалога показать промо премиума."""
+        body = await self._request("POST", peer, "stop")
+        return StopResult(body["was_active"], bool(body.get("promo", False)))
 
     async def report(self, peer: Peer) -> str:
         """Закрывает диалог с пометкой жалобы и ставит в поиск. Возвращает новую фазу."""
