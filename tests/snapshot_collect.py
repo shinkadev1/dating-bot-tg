@@ -180,6 +180,7 @@ async def _run_incoming(text: str, phase: str, awaiting: bool, mode: str, upload
         task.cancel()
     await asyncio.gather(*h._search_timeouts.values(), return_exceptions=True)
     h._search_timeouts.clear()
+    h._search_modes.clear()
     return {
         "gateway": _calls(gw, peer),
         "api": _calls(api, peer),

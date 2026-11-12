@@ -18921,7 +18921,17 @@
    ]
   },
   "Пошлый чат|chatting|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -18930,31 +18940,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|chatting|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -18963,31 +18982,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|chatting|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -18996,22 +19015,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "Пошлый чат|chatting|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19020,31 +19048,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|chatting|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19053,31 +19090,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|chatting|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19086,22 +19123,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "Пошлый чат|idle|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19110,31 +19156,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|idle|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19143,31 +19198,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|idle|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19176,22 +19231,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "Пошлый чат|idle|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19200,31 +19264,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|idle|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19233,31 +19306,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|idle|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19266,22 +19339,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "Пошлый чат|searching|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19290,31 +19372,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|searching|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19323,31 +19414,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|searching|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19356,22 +19447,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "Пошлый чат|searching|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -19380,64 +19480,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "Пошлый чат|searching|1|B": {
-   "age_after": null,
-   "api": [
-    [
-     "visit",
-     [
-      "PEER",
-      null
-     ],
-     {}
-    ]
-   ],
-   "awaiting_after": false,
    "gateway": [
     [
      "send",
      [
       "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
+      "🔎 Ищем собеседника...",
+      "chat"
      ],
      {}
     ],
     [
-     "send_premium",
+     "send",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
      ],
      {}
     ]
-   ]
-  },
-  "Пошлый чат|searching|1|C": {
-   "age_after": null,
+   ],
    "api": [
     [
      "visit",
@@ -19446,19 +19522,51 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
+  },
+  "Пошлый чат|searching|1|C": {
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
+   "api": [
+    [
+     "visit",
+     [
+      "PEER",
+      null
+     ],
+     {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
+    ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "Премиум статус|chatting|0|A": {
    "age_after": null,
@@ -22089,7 +22197,17 @@
    ]
   },
   "найти девушку|chatting|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22098,31 +22216,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|chatting|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22131,31 +22258,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|chatting|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22164,22 +22291,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "найти девушку|chatting|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22188,31 +22324,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|chatting|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22221,31 +22366,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|chatting|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22254,22 +22399,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "найти девушку|idle|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22278,31 +22432,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|idle|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22311,31 +22474,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|idle|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22344,22 +22507,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "найти девушку|idle|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22368,31 +22540,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|idle|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22401,31 +22582,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|idle|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22434,22 +22615,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "найти девушку|searching|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22458,31 +22648,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|searching|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22491,31 +22690,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|searching|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22524,22 +22723,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "найти девушку|searching|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -22548,64 +22756,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "найти девушку|searching|1|B": {
-   "age_after": null,
-   "api": [
-    [
-     "visit",
-     [
-      "PEER",
-      null
-     ],
-     {}
-    ]
-   ],
-   "awaiting_after": false,
    "gateway": [
     [
      "send",
      [
       "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
+      "🔎 Ищем собеседника...",
+      "chat"
      ],
      {}
     ],
     [
-     "send_premium",
+     "send",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
      ],
      {}
     ]
-   ]
-  },
-  "найти девушку|searching|1|C": {
-   "age_after": null,
+   ],
    "api": [
     [
      "visit",
@@ -22614,19 +22798,51 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
+  },
+  "найти девушку|searching|1|C": {
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
+   "api": [
+    [
+     "visit",
+     [
+      "PEER",
+      null
+     ],
+     {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
+    ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "найти собеседника|chatting|0|A": {
    "age_after": null,
@@ -24822,7 +25038,17 @@
    ]
   },
   "пошлый чат|chatting|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -24831,31 +25057,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|chatting|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -24864,31 +25099,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|chatting|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -24897,22 +25132,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "пошлый чат|chatting|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -24921,31 +25165,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|chatting|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -24954,31 +25207,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|chatting|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -24987,22 +25240,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "пошлый чат|idle|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -25011,31 +25273,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|idle|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -25044,31 +25315,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|idle|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -25077,22 +25348,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "пошлый чат|idle|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -25101,31 +25381,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|idle|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -25134,31 +25423,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|idle|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -25167,22 +25456,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "пошлый чат|searching|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -25191,31 +25489,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|searching|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -25224,31 +25531,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|searching|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -25257,22 +25564,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "пошлый чат|searching|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -25281,64 +25597,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "пошлый чат|searching|1|B": {
-   "age_after": null,
-   "api": [
-    [
-     "visit",
-     [
-      "PEER",
-      null
-     ],
-     {}
-    ]
-   ],
-   "awaiting_after": false,
    "gateway": [
     [
      "send",
      [
       "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
+      "🔎 Ищем собеседника...",
+      "chat"
      ],
      {}
     ],
     [
-     "send_premium",
+     "send",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
      ],
      {}
     ]
-   ]
-  },
-  "пошлый чат|searching|1|C": {
-   "age_after": null,
+   ],
    "api": [
     [
      "visit",
@@ -25347,19 +25639,51 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
+  },
+  "пошлый чат|searching|1|C": {
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
+   "api": [
+    [
+     "visit",
+     [
+      "PEER",
+      null
+     ],
+     {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
+    ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "премиум статус|chatting|0|A": {
    "age_after": null,
@@ -28509,7 +28833,17 @@
    ]
   },
   "❤️ Найти девушку|chatting|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28518,31 +28852,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|chatting|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28551,31 +28894,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|chatting|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28584,22 +28927,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ Найти девушку|chatting|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28608,31 +28960,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|chatting|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28641,31 +29002,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|chatting|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28674,22 +29035,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ Найти девушку|idle|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28698,31 +29068,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|idle|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28731,31 +29110,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|idle|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28764,22 +29143,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ Найти девушку|idle|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28788,31 +29176,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|idle|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28821,31 +29218,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|idle|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28854,22 +29251,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ Найти девушку|searching|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28878,31 +29284,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|searching|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28911,31 +29326,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|searching|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28944,22 +29359,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ Найти девушку|searching|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -28968,31 +29392,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|searching|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29001,31 +29434,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ Найти девушку|searching|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29034,22 +29467,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ найти девушку|chatting|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29058,31 +29500,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|chatting|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29091,31 +29542,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|chatting|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29124,22 +29575,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ найти девушку|chatting|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29148,31 +29608,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|chatting|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29181,31 +29650,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|chatting|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29214,22 +29683,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ найти девушку|idle|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29238,31 +29716,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|idle|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29271,31 +29758,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|idle|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29304,22 +29791,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ найти девушку|idle|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29328,31 +29824,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|idle|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29361,31 +29866,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|idle|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29394,22 +29899,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ найти девушку|searching|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29418,31 +29932,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|searching|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29451,31 +29974,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|searching|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29484,22 +30007,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "❤️ найти девушку|searching|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -29508,64 +30040,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "❤️ найти девушку|searching|1|B": {
-   "age_after": null,
-   "api": [
-    [
-     "visit",
-     [
-      "PEER",
-      null
-     ],
-     {}
-    ]
-   ],
-   "awaiting_after": false,
    "gateway": [
     [
      "send",
      [
       "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
+      "🔎 Ищем собеседника...",
+      "chat"
      ],
      {}
     ],
     [
-     "send_premium",
+     "send",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
      ],
      {}
     ]
-   ]
-  },
-  "❤️ найти девушку|searching|1|C": {
-   "age_after": null,
+   ],
    "api": [
     [
      "visit",
@@ -29574,19 +30082,51 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
+  },
+  "❤️ найти девушку|searching|1|C": {
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
+   "api": [
+    [
+     "visit",
+     [
+      "PEER",
+      null
+     ],
+     {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
+    ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "➡️ Следующий собеседник|chatting|0|A": {
    "age_after": null,
@@ -36408,7 +36948,17 @@
    ]
   },
   "🔥 Пошлый чат|chatting|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36417,31 +36967,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|chatting|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36450,31 +37009,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|chatting|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36483,22 +37042,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 Пошлый чат|chatting|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36507,31 +37075,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|chatting|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36540,31 +37117,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|chatting|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36573,22 +37150,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 Пошлый чат|idle|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36597,31 +37183,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|idle|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36630,31 +37225,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|idle|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36663,22 +37258,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 Пошлый чат|idle|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36687,31 +37291,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|idle|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36720,31 +37333,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|idle|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36753,22 +37366,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 Пошлый чат|searching|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36777,31 +37399,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|searching|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36810,31 +37441,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|searching|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36843,22 +37474,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 Пошлый чат|searching|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36867,31 +37507,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|searching|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36900,31 +37549,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 Пошлый чат|searching|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36933,22 +37582,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 пошлый чат|chatting|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36957,31 +37615,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|chatting|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -36990,31 +37657,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|chatting|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37023,22 +37690,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 пошлый чат|chatting|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37047,31 +37723,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|chatting|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37080,31 +37765,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|chatting|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37113,22 +37798,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 пошлый чат|idle|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37137,31 +37831,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|idle|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37170,31 +37873,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|idle|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37203,22 +37906,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 пошлый чат|idle|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37227,31 +37939,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|idle|1|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37260,31 +37981,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|idle|1|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37293,22 +38014,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 пошлый чат|searching|0|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37317,31 +38047,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|searching|0|B": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ],
+    [
+     "send",
+     [
+      "PEER",
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37350,31 +38089,31 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|searching|0|C": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37383,22 +38122,31 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🔥 пошлый чат|searching|1|A": {
-   "age_after": null,
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
    "api": [
     [
      "visit",
@@ -37407,64 +38155,40 @@
       null
      ],
      {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
     ]
    ],
    "awaiting_after": false,
-   "gateway": [
-    [
-     "send",
-     [
-      "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
-     ],
-     {}
-    ],
-    [
-     "send_premium",
-     [
-      "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
-     ],
-     {}
-    ]
-   ]
+   "age_after": null
   },
   "🔥 пошлый чат|searching|1|B": {
-   "age_after": null,
-   "api": [
-    [
-     "visit",
-     [
-      "PEER",
-      null
-     ],
-     {}
-    ]
-   ],
-   "awaiting_after": false,
    "gateway": [
     [
      "send",
      [
       "PEER",
-      "👑 Для продолжения нужен Премиум",
-      "dating"
+      "🔎 Ищем собеседника...",
+      "chat"
      ],
      {}
     ],
     [
-     "send_premium",
+     "send",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=False, premium_until=None)"
+      "💬 Собеседник найден. Вы можете писать ему сюда 👇",
+      "chat"
      ],
      {}
     ]
-   ]
-  },
-  "🔥 пошлый чат|searching|1|C": {
-   "age_after": null,
+   ],
    "api": [
     [
      "visit",
@@ -37473,19 +38197,51 @@
       null
      ],
      {}
-    ]
-   ],
-   "awaiting_after": false,
-   "gateway": [
+    ],
     [
-     "send_premium",
+     "search",
      [
       "PEER",
-      "PremiumLink(url='https://pay.example/p', premium_active=True, premium_until=datetime.datetime(2026, 1, 2, 0, 0, tzinfo=datetime.timezone.utc))"
+      "adult"
      ],
      {}
     ]
-   ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
+  },
+  "🔥 пошлый чат|searching|1|C": {
+   "gateway": [
+    [
+     "send",
+     [
+      "PEER",
+      "🔎 Ищем собеседника...",
+      "chat"
+     ],
+     {}
+    ]
+   ],
+   "api": [
+    [
+     "visit",
+     [
+      "PEER",
+      null
+     ],
+     {}
+    ],
+    [
+     "search",
+     [
+      "PEER",
+      "adult"
+     ],
+     {}
+    ]
+   ],
+   "awaiting_after": false,
+   "age_after": null
   },
   "🚫 Пожаловаться|chatting|0|A": {
    "age_after": null,

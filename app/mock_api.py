@@ -180,7 +180,7 @@ class MockChatApi:
     async def phase(self, peer: Peer) -> str:
         return self._state(peer).phase
 
-    async def search(self, peer: Peer) -> str:
+    async def search(self, peer: Peer, mode: str | None = None) -> str:
         self._cancel_pending(peer)
         await self._close(peer, "stopped")
         waiter = self._waiting_peer(peer)

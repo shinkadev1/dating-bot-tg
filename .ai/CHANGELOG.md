@@ -31,3 +31,7 @@ Inline-кнопка `act:<действие>` выполняется напрям
 ## 2026-11-12 — промо премиума на 5-м, 15-м, 25-м… диалоге (не выкачено)
 
 Контракт Chat API: `partner_left` и ответ `POST /stop` могут содержать `"promo": true` (отдельного события promo нет). `StopResult(was_active, promo)` в `api_types.py`; `events.py` и `handle_stop` при флаге без премиума шлют экраны `partner_left_promo` / `stopped_promo` (flow.yaml, картинка premium.png, reply-кнопка «💎 Купить премиум» → экран premium). Экран `premium_promo` и событие `promo` удалены. Тесты: `tests/test_promo_event.py`. Не выкачено; боты выкатываются раньше vk-bot.
+
+## 2026-11-12 — Пошлый чат только с премиумом
+
+`api_client.search(peer, mode=None)` шлёт `{"mode":"adult"}` только при заданном mode; 403 на search → `NotPremiumError`. `handle_dating_find` ищет в режиме adult, при 403 показывает экран премиума; режим последнего поиска хранится в `handlers._search_modes` и сохраняется для «Следующий собеседник», обычный поиск его сбрасывает. flow.yaml: `dating_find.next: chat` (+ комментарий про 403 → premium), тексты не менялись. Снимок эквивалентности обновлён только для входов «Пошлый чат». Тесты `tests/test_adult_chat.py`; `unittest discover` — 106 OK.

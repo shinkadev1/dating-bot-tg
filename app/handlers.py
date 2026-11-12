@@ -13,7 +13,7 @@ from aiogram.enums import ChatType
 from aiogram.types import CallbackQuery, Message
 
 from app import flow
-from app.api_client import ChatApiError, NotChattingError, chat_api
+from app.api_client import ChatApiError, NotChattingError, NotPremiumError, chat_api
 from app.config import DEV
 from app.flow import ACTION_PREFIX, GOTO_PREFIX
 from app.gateway import gateway
@@ -48,6 +48,9 @@ logger = logging.getLogger(__name__)
 
 SEARCH_TIMEOUT_SECONDS = 30
 _search_timeouts: dict[Peer, asyncio.Task[None]] = {}
+# Режим последнего поиска пользователя (adult — «Пошлый чат»); нет записи = обычный поиск.
+ADULT_MODE = "adult"
+_search_modes: dict[Peer, str] = {}
 
 # Выбор комнаты и настроек поиска живёт в памяти процесса: в Chat API он пока не уходит.
 _room_choice: dict[Peer, str] = {}
@@ -133,7 +136,14 @@ async def handle_next(peer: Peer, action: str | None, searching: bool) -> bool:
     if searching:
         await gateway.send(peer, SEARCHING_TEXT, "chat")
         return True
-    await connect_with_partner(peer)
+    mode = _search_modes.get(peer)
+    try:
+        await connect_with_partner(peer, mode)
+    except NotPremiumError:
+        if mode is None:
+            raise
+        _search_modes.pop(peer, None)
+        await send_premium_gate(peer)
     return True
 
 
@@ -402,8 +412,12 @@ async def send_media_premium(peer: Peer, *, partner: bool = False) -> None:
 
 
 async def handle_dating_find(peer: Peer) -> None:
-    """Кнопка «Пошлый чат»: без премиума поиск не начинается — текст и промо."""
-    await send_premium_gate(peer)
+    """Кнопка «Пошлый чат»: поиск в режиме adult; без премиума (403) — текст и промо."""
+    try:
+        await connect_with_partner(peer, ADULT_MODE)
+    except NotPremiumError:
+        _search_modes.pop(peer, None)
+        await send_premium_gate(peer)
 
 
 async def handle_dating(peer: Peer) -> None:
@@ -458,9 +472,17 @@ async def handle_report(peer: Peer) -> None:
     _search_timeouts[peer] = asyncio.create_task(_leave_queue_later(peer))
 
 
-async def connect_with_partner(peer: Peer) -> None:
-    """Ставит в поиск. Второй стороне о паре и прежнему собеседнику об уходе пишет Chat API."""
-    phase = await chat_api.search(peer)
+async def connect_with_partner(peer: Peer, mode: str | None = None) -> None:
+    """Ставит в поиск. Второй стороне о паре и прежнему собеседнику об уходе пишет Chat API.
+
+    mode запоминается: «Следующий собеседник» после пошлого диалога ищет в том же режиме.
+    Обычный поиск (mode=None) сбрасывает режим.
+    """
+    phase = await (chat_api.search(peer, mode) if mode else chat_api.search(peer))
+    if mode:
+        _search_modes[peer] = mode
+    else:
+        _search_modes.pop(peer, None)
     await gateway.send(peer, SEARCHING_TEXT, "chat")
     cancel_search_timeout(peer)
     if phase == "chatting":

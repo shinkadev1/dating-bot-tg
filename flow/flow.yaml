@@ -52,7 +52,8 @@ screens:
           action: dating_find
           style: primary
           aliases: ["пошлый чат", "❤️ найти девушку", "найти девушку"]
-          next: premium
+          # Поиск в режиме adult: успех — экран поиска chat; 403 (нет премиума) — экран premium.
+          next: chat
         - text: "📍 Выбрать город"
           action: dating_rooms
           style: primary
