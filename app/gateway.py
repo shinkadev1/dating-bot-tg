@@ -19,6 +19,7 @@ from app.ui import (
     GREETING,
     IDLE_KEYBOARD,
     PARTNER_LEFT_KEYBOARD,
+    PHOTO_LOCKED_TEXT,
     PREMIUM_STATUS_TEXT,
     ROOMS_TEXT,
     SETTINGS_TEXT,
@@ -261,6 +262,35 @@ class Gateway:
         except Exception as exc:  # noqa: BLE001
             logger.warning("Не отправил медиа tg:%s: %s: %s", peer.user_id, type(exc).__name__, exc)
             return True
+
+    async def send_locked_photo(self, peer: Peer, data: bytes, premium_url: str) -> bool:
+        """Размытое фото собеседника с подписью и кнопкой покупки премиума. False — человек недоступен."""
+        if self._bot is None:
+            raise RuntimeError("Бот Telegram ещё не запущен")
+        for attempt in range(2):
+            try:
+                await self._bot.send_photo(
+                    peer.user_id,
+                    BufferedInputFile(data, filename="photo.jpg"),
+                    caption=PHOTO_LOCKED_TEXT[:1024],
+                    reply_markup=build_markup("photo_locked", premium_url=premium_url),
+                )
+                return True
+            except TelegramRetryAfter as exc:
+                if attempt:
+                    break
+                await asyncio.sleep(exc.retry_after)
+            except (TelegramForbiddenError, TelegramBadRequest) as exc:
+                if _tg_gone(exc):
+                    logger.info("Пользователь tg:%s недоступен: %s", peer.user_id, exc)
+                    return False
+                logger.warning("Не отправил закрытое фото tg:%s: %s", peer.user_id, exc)
+                return True
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("Не отправил закрытое фото tg:%s: %s: %s", peer.user_id, type(exc).__name__, exc)
+                return True
+        logger.warning("Telegram ограничил закрытое фото tg:%s", peer.user_id)
+        return True
 
     async def _deliver_file(
         self,

@@ -40,6 +40,16 @@ async def _deliver(body: dict) -> None:
         delivered = await gateway.send(peer, FOUND_TEXT, "chat")
     elif kind == "message":
         delivered = await gateway.send(peer, format_partner(str(body.get("text") or "")), "chat")
+    elif kind == "media" and body.get("locked") and body.get("media_id"):
+        # Размытая копия фото: без премиума у получателя. Файл Telegram не используется.
+        media_id = str(body["media_id"])
+        try:
+            data, _content_type, _kind = await chat_api.fetch_media(media_id)
+        except ChatApiError as exc:
+            logger.warning("Не скачал размытое фото %s для %s: %s", media_id, peer, exc)
+            return
+        offer = await premium_offer(peer)
+        delivered = await gateway.send_locked_photo(peer, data, offer.url)
     elif kind == "media":
         media_id = str(body.get("media_id") or "")
         tg_file_id = str(body.get("tg_file_id") or "")
