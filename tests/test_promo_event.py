@@ -114,7 +114,7 @@ class FlowTests(unittest.TestCase):
             ["💎 Купить премиум", "🔍 Новый собеседник", "🚫 Пожаловаться"],
             ["premium", "start", "report"],
         )
-        self.assertEqual(flow.get().screen("partner_left_promo").on, "partner_left")
+        self.assertIsNone(flow.get().screen("partner_left_promo").on)
 
     def test_stopped_promo(self) -> None:
         self.check("stopped_promo", "Диалог остановлен.", ["💎 Купить премиум", "🔍 Новый собеседник"], ["premium", "start"])
