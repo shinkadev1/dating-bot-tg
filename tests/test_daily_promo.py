@@ -64,6 +64,16 @@ class DailyPromoScreenTests(unittest.TestCase):
         actions = [b.action for row in screen.buttons for b in row]
         self.assertEqual(actions, ["find", "premium"])
 
+    def test_hello_screen_shape(self) -> None:
+        screen = flow.get().screen("daily_hello")
+        self.assertEqual(screen.kind, "inline")
+        self.assertFalse(screen.image)
+        self.assertIn("«Привет»", screen.text)
+        labels = [b.text for row in screen.buttons for b in row]
+        actions = [b.action for row in screen.buttons for b in row]
+        self.assertEqual(labels, ["Давай", "💎 Премиум"])
+        self.assertEqual(actions, ["find", "premium"])
+
 
 if __name__ == "__main__":
     unittest.main()

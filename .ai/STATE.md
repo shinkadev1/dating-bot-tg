@@ -1,5 +1,9 @@
 # Состояние dating-bot-tg
 
+## Вторая ежедневная рассылка «Привет», 2026-11-14 (задача 59046)
+
+Бот TG: экран `daily_hello` во flow.yaml (inline «Давай» → act:find, «💎 Премиум» → act:premium), тест формы экрана. Код не менялся: `notice.screen` уже показывает любой экран flow. Проверки: `python -m app.flow` ok, `python -m unittest discover -s tests` — 119 OK. Подробности — [tasks/59046.md](tasks/59046.md).
+
 ## Размытое фото, 2026-11-12
 
 Ветка `loop/photo-blur` (от `9c353ab`): обработка `media` с `locked` и экран `photo_locked`. Не выкачено, не слито в master. Тесты: 112 OK. Реальная доставка в Telegram не проверялась.

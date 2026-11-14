@@ -315,6 +315,24 @@ screens:
       x: 1280
       y: 900
 
+  # Ежедневная рассылка, чередуется по дням с daily_promo (выбор дня — в Chat API), notice с полем screen: daily_hello.
+  daily_hello:
+    title: "Ежедневная рассылка (вечер): «Привет»"
+    text: "Давай начнем с простого «Привет» и посмотрим, куда это нас приведет ☕✨"
+    keyboard: inline
+    buttons:
+      - - text: "Давай"
+          action: find
+          style: primary
+          next: chat
+      - - text: "💎 Премиум"
+          action: premium
+          style: success
+          next: premium
+    pos:
+      x: 1280
+      y: 1080
+
 # Служебные тексты, тосты и шаблоны. {поля} подставляет код.
 texts:
   searching: "🔎 Ищем собеседника..."

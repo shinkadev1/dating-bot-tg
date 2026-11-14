@@ -1,5 +1,9 @@
 # Текущая задача
 
+## Вторая ежедневная рассылка «Привет», 2026-11-14 (задача 59046)
+
+Бот TG: экран `daily_hello` во flow.yaml (inline «Давай» → act:find, «💎 Премиум» → act:premium), тест формы экрана. Код не менялся: `notice.screen` уже показывает любой экран flow. Проверки: `python -m app.flow` ok, `python -m unittest discover -s tests` — 119 OK. Подробности — [tasks/59046.md](tasks/59046.md).
+
 ## Размытое фото без премиума — 2026-11-12
 
 Ветка `loop/photo-blur`. Событие `media` с `"locked": true`: `media_id` — размытая копия (image/jpeg), `tg_file_id` нет. Бот скачивает её, шлёт фото с подписью из экрана `photo_locked` и inline-кнопкой «💎 Купить премиум» с личной ссылкой (`premium_offer`). Не выкачено; требует vk-bot с полем `locked`, без него поведение прежнее.
