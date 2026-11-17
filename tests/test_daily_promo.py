@@ -74,6 +74,14 @@ class DailyPromoScreenTests(unittest.TestCase):
         self.assertEqual(labels, ["Давай", "💎 Премиум"])
         self.assertEqual(actions, ["find", "premium"])
 
+    def test_anya_screen_shape(self) -> None:
+        screen = flow.get().screen("daily_anya")
+        self.assertEqual(screen.kind, "inline")
+        self.assertTrue(screen.image)
+        buttons = [b for row in screen.buttons for b in row]
+        self.assertEqual([b.text for b in buttons], ["💬 Начать чат"])
+        self.assertEqual([b.action for b in buttons], ["find"])
+
 
 if __name__ == "__main__":
     unittest.main()

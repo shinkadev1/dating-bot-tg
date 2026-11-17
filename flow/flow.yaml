@@ -358,6 +358,21 @@ screens:
       x: 1280
       y: 1080
 
+  # Ежедневная рассылка (Аня): notice с полем screen: daily_anya; картинка намеренно размыта.
+  daily_anya:
+    title: "Ежедневная рассылка (Аня)"
+    image: "images/daily_anya.jpg"
+    text: "⚡️ Тебе хочет написать Аня, 26..."
+    keyboard: inline
+    buttons:
+      - - text: "💬 Начать чат"
+          action: find
+          style: primary
+          next: chat
+    pos:
+      x: 1280
+      y: 1260
+
 # Служебные тексты, тосты и шаблоны. {поля} подставляет код.
 texts:
   adult_enter: "😈 Ты вошел в <b>режим пошлого чата</b>\n\nЕсли <b>захочешь покинуть его</b> - нажимай кнопку \"💭 Обычный чат\" в меню"
