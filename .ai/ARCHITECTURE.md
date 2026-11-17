@@ -39,3 +39,5 @@ Telegram → aiogram handlers → HTTPS Chat API через Cloudflare Access. �
 Push в `master` запускает `.github/workflows/deploy.yml`: job `validate` (`python -m app.flow`, unittest) → `publish` → `deploy`; серверное обновление — `deploy/update.sh`. Образ копирует `flow/` в `/app/flow`.
 
 Схема описывает репозиторий, а не подтверждённое состояние production.
+
+- Рассылка (не выкачено, ветка loop/daily-broadcast): `notice` может нести `screen` — тогда `events._deliver_notice` шлёт экран flow через `gateway.send_screen` (экран `daily_promo`: без картинки, inline «🔥 Начать чат» act:find и «💎 Премиум» act:premium); без `screen` или с неизвестным — прежний текст. Время рассылки задаёт Chat API.

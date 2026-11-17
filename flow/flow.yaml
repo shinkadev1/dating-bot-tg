@@ -321,6 +321,43 @@ screens:
       x: 1280
       y: 720
 
+  # Ежедневная рассылка: Chat API шлёт notice с полем screen: daily_promo, время задаёт Chat API.
+  # Кнопки inline: нажатие выполняет action (act:find / act:premium) независимо от того, в диалоге человек или нет.
+  daily_promo:
+    title: "Ежедневная рассылка (вечер)"
+    text: "😏👇 В пошлом чате горячо, оценишь?"
+    keyboard: inline
+    buttons:
+      - - text: "🔥 Начать чат"
+          action: find
+          style: primary
+          next: chat
+      - - text: "💎 Премиум"
+          action: premium
+          style: success
+          next: premium
+    pos:
+      x: 1280
+      y: 900
+
+  # Ежедневная рассылка, чередуется по дням с daily_promo (выбор дня — в Chat API), notice с полем screen: daily_hello.
+  daily_hello:
+    title: "Ежедневная рассылка (вечер): «Привет»"
+    text: "Давай начнем с простого «Привет» и посмотрим, куда это нас приведет ☕✨"
+    keyboard: inline
+    buttons:
+      - - text: "Давай"
+          action: find
+          style: primary
+          next: chat
+      - - text: "💎 Премиум"
+          action: premium
+          style: success
+          next: premium
+    pos:
+      x: 1280
+      y: 1080
+
 # Служебные тексты, тосты и шаблоны. {поля} подставляет код.
 texts:
   adult_enter: "😈 Ты вошел в <b>режим пошлого чата</b>\n\nЕсли <b>захочешь покинуть его</b> - нажимай кнопку \"💭 Обычный чат\" в меню"
