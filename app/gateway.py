@@ -14,6 +14,7 @@ from app import flow
 from app.api_types import PremiumLink
 from app.peer import Peer
 from app.ui import (
+    CHAT_ADULT_KEYBOARD,
     CHAT_KEYBOARD,
     DATING_KEYBOARD,
     GREETING,
@@ -32,12 +33,13 @@ from app.ui import (
 
 logger = logging.getLogger(__name__)
 
-Keyboard = Literal["main", "chat", "partner_left", "notice", "dating"]
+Keyboard = Literal["main", "chat", "chat_adult", "partner_left", "notice", "dating"]
 _MAX_TEXT_LENGTH = 4096
 _TG_METHODS = {"photo", "audio", "voice", "video", "video_note"}
 _KEYBOARDS: dict[str, ReplyKeyboardMarkup | None] = {
     "main": IDLE_KEYBOARD,
     "chat": CHAT_KEYBOARD,
+    "chat_adult": CHAT_ADULT_KEYBOARD,
     "partner_left": PARTNER_LEFT_KEYBOARD,
     "dating": DATING_KEYBOARD,
     "notice": None,
@@ -55,25 +57,28 @@ class Gateway:
     def bind(self, bot: Bot) -> None:
         self._bot = bot
 
-    async def send(self, peer: Peer, text: str, keyboard: Keyboard) -> bool:
+    async def send(self, peer: Peer, text: str, keyboard: Keyboard, *, html: bool = False) -> bool:
         """Отправляет текст и клавиатуру. False, если пользователь недоступен: заблокировал бота или удалён.
 
         Временные сбои Telegram считаются доставкой, чтобы не обрывать диалог из-за сети.
         """
-        return await self._send_text(peer, text, _KEYBOARDS.get(keyboard))
+        return await self._send_text(peer, text, _KEYBOARDS.get(keyboard), html=html)
 
     async def _send_text(
         self,
         peer: Peer,
         text: str,
         markup: ReplyKeyboardMarkup | InlineKeyboardMarkup | None,
+        *,
+        html: bool = False,
     ) -> bool:
         """Текст с клавиатурой или без неё. False — человек недоступен."""
         if self._bot is None:
             raise RuntimeError("Бот Telegram ещё не запущен")
         for attempt in range(2):
             try:
-                await self._bot.send_message(peer.user_id, text[:_MAX_TEXT_LENGTH], reply_markup=markup)
+                extra = {"parse_mode": "HTML"} if html else {}
+                await self._bot.send_message(peer.user_id, text[:_MAX_TEXT_LENGTH], reply_markup=markup, **extra)
                 return True
             except TelegramRetryAfter as exc:
                 if attempt:

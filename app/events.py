@@ -14,7 +14,7 @@ from websockets.asyncio.client import connect
 from app.api_client import ChatApiError, chat_api
 from app.config import CHAT_API_URL, DEV, EVENTS_CONSUMER, chat_api_headers
 from app.gateway import NeedBytes, gateway
-from app.handlers import cancel_search_timeout
+from app.handlers import cancel_search_timeout, chat_keyboard
 from app.mock_api import MockChatApi
 from app.paylink import premium_offer
 from app.peer import Peer
@@ -37,9 +37,9 @@ async def _deliver(body: dict) -> None:
     kind = body.get("type")
     if kind == "partner_found":
         cancel_search_timeout(peer)
-        delivered = await gateway.send(peer, FOUND_TEXT, "chat")
+        delivered = await gateway.send(peer, FOUND_TEXT, chat_keyboard(peer))
     elif kind == "message":
-        delivered = await gateway.send(peer, format_partner(str(body.get("text") or "")), "chat")
+        delivered = await gateway.send(peer, format_partner(str(body.get("text") or "")), chat_keyboard(peer))
     elif kind == "media" and body.get("locked") and body.get("media_id"):
         # Размытая копия фото: без премиума у получателя. Файл Telegram не используется.
         media_id = str(body["media_id"])

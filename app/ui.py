@@ -66,6 +66,9 @@ NEW_PARTNER_BTN = _flow_button("partner_left", "start").text
 PREMIUM_BTN = _flow_button("chat", "premium").text
 REPORT_BTN = _flow_button("partner_left", "report").text
 
+ADULT_ENTER_TEXT = _text("adult_enter")
+NORMAL_ENTER_TEXT = _text("normal_enter")
+NORMAL_CHAT_BTN = _flow_button("chat_adult", "normal_chat").text
 SEARCHING_TEXT = _text("searching")
 NO_PARTNERS_TEXT = _text("no_partners")
 FOUND_TEXT = _screen_text("chat")
@@ -126,6 +129,7 @@ def build_reply(screen_id: str) -> ReplyKeyboardMarkup:
 IDLE_KEYBOARD = build_reply("main")
 DATING_KEYBOARD = build_reply("dating")
 CHAT_KEYBOARD = build_reply("chat")
+CHAT_ADULT_KEYBOARD = build_reply("chat_adult")
 PARTNER_LEFT_KEYBOARD = build_reply("partner_left")
 
 # Даты премиума показываем по Москве.

@@ -98,11 +98,79 @@ class DatingFindTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.gw.send.await_args.args[1], h.SEARCHING_TEXT)
         self.assertEqual(h._search_modes[PEER], "adult")
 
+    async def test_notice_sent_before_searching_html_with_adult_keyboard(self) -> None:
+        await h.handle_dating_find(PEER)
+        first, second = self.gw.send.await_args_list[:2]
+        self.assertEqual(first.args[1], h.ADULT_ENTER_TEXT)
+        self.assertIn("<b>режим пошлого чата</b>", h.ADULT_ENTER_TEXT)
+        self.assertTrue(first.kwargs.get("html"))
+        self.assertEqual(first.args[2], "chat_adult")
+        self.assertEqual(second.args[1], h.SEARCHING_TEXT)
+        self.assertEqual(second.args[2], "chat_adult")
+
+    async def test_no_notice_without_premium(self) -> None:
+        self.api.search.side_effect = NotPremiumError("Нужен премиум")
+        await h.handle_dating_find(PEER)
+        texts = [call.args[1] for call in self.gw.send.await_args_list]
+        self.assertNotIn(h.ADULT_ENTER_TEXT, texts)
+
+    async def test_normal_search_has_normal_keyboard_and_no_notice(self) -> None:
+        await h.connect_with_partner(PEER)
+        for call in self.gw.send.await_args_list:
+            self.assertEqual(call.args[2], "chat")
+        self.assertNotIn(h.ADULT_ENTER_TEXT, [c.args[1] for c in self.gw.send.await_args_list])
+
+    def test_keyboard_button_only_in_adult_mode(self) -> None:
+        from app.ui import CHAT_ADULT_KEYBOARD, CHAT_KEYBOARD, NORMAL_CHAT_BTN
+
+        def rows(kb):
+            return [[b.text for b in row] for row in kb.keyboard]
+
+        self.assertEqual(rows(CHAT_ADULT_KEYBOARD)[1], [NORMAL_CHAT_BTN])
+        self.assertEqual(len(rows(CHAT_ADULT_KEYBOARD)), len(rows(CHAT_KEYBOARD)) + 1)
+        self.assertNotIn(NORMAL_CHAT_BTN, [t for row in rows(CHAT_KEYBOARD) for t in row])
+        self.assertEqual(h.chat_keyboard(PEER), "chat")
+        h._search_modes[PEER] = "adult"
+        self.assertEqual(h.chat_keyboard(PEER), "chat_adult")
+
+    async def test_normal_chat_ends_dialog_and_searches_normal(self) -> None:
+        await h.handle_dating_find(PEER)
+        self.api.search.reset_mock()
+        self.gw.send.reset_mock()
+        self.api.phase.return_value = "chatting"
+        self.api.stop = AsyncMock()
+        await h.handle_normal_chat(PEER)
+        self.api.stop.assert_awaited_once_with(PEER)
+        self.api.search.assert_awaited_once_with(PEER)
+        self.assertNotIn(PEER, h._search_modes)
+        calls = self.gw.send.await_args_list
+        self.assertEqual([c.args[1] for c in calls], [h.NORMAL_ENTER_TEXT, h.SEARCHING_TEXT])
+        self.assertTrue(calls[0].kwargs.get("html"))
+        self.assertEqual([c.args[2] for c in calls], ["chat", "chat"])
+
+    async def test_normal_chat_while_searching_switches_mode(self) -> None:
+        await h.handle_dating_find(PEER)
+        self.api.search.reset_mock()
+        self.api.phase.return_value = "searching"
+        self.api.stop = AsyncMock()
+        await h.handle_normal_chat(PEER)
+        self.api.stop.assert_awaited_once_with(PEER)
+        self.api.search.assert_awaited_once_with(PEER)
+        self.assertNotIn(PEER, h._search_modes)
+
+    async def test_normal_chat_outside_adult_mode_does_not_stop_dialog(self) -> None:
+        self.api.phase.return_value = "chatting"
+        self.api.stop = AsyncMock()
+        await h.handle_normal_chat(PEER)
+        self.api.stop.assert_not_awaited()
+        self.api.search.assert_not_awaited()
+        self.gw.send.assert_not_awaited()
+
     async def test_adult_match_found_at_once(self) -> None:
         self.api.search.return_value = "chatting"
         await h.handle_dating_find(PEER)
         texts = [call.args[1] for call in self.gw.send.await_args_list]
-        self.assertEqual(texts, [h.SEARCHING_TEXT, h.FOUND_TEXT])
+        self.assertEqual(texts, [h.ADULT_ENTER_TEXT, h.SEARCHING_TEXT, h.FOUND_TEXT])
 
     async def test_no_premium_shows_premium_screen(self) -> None:
         self.api.search.side_effect = NotPremiumError("Нужен премиум")
