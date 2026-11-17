@@ -128,6 +128,7 @@ async def handle_stop(peer: Peer, action: str | None, active: bool) -> bool:
         return False
     if active:
         result = await chat_api.stop(peer)
+        _search_modes.pop(peer, None)
         if result.promo and not (await premium_offer(peer)).premium_active:
             await gateway.send_screen(peer, "stopped_promo")
         else:
@@ -234,7 +235,7 @@ async def _dispatch(
         if action == "dating_find":
             await handle_dating_find(peer)
             return
-        if action == "normal_chat":
+        if action == "normal_chat" and (_search_modes.get(peer) == ADULT_MODE or await chat_api.phase(peer) == "idle"):
             await handle_normal_chat(peer)
             return
         if action == "dating":
@@ -450,6 +451,7 @@ async def _leave_queue_later(peer: Peer) -> None:
         if await chat_api.phase(peer) != "searching":
             return
         await chat_api.stop(peer)
+        _search_modes.pop(peer, None)
         await gateway.send(peer, NO_PARTNERS_TEXT, "main")
     except asyncio.CancelledError:
         raise
@@ -511,10 +513,13 @@ async def handle_normal_chat(peer: Peer) -> None:
         if await chat_api.phase(peer) == "idle":
             await connect_with_partner(peer)
         return
-    _search_modes.pop(peer, None)
     cancel_search_timeout(peer)
     if await chat_api.phase(peer) != "idle":
-        await chat_api.stop(peer)
+        try:
+            await chat_api.stop(peer)
+        except NotChattingError:  # собеседник ушёл между проверкой и остановкой
+            pass
+    _search_modes.pop(peer, None)
     await connect_with_partner(peer, notice=NORMAL_ENTER_TEXT)
 
 

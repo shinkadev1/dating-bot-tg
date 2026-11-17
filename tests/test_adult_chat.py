@@ -108,6 +108,26 @@ class DatingFindTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(second.args[1], h.SEARCHING_TEXT)
         self.assertEqual(second.args[2], "chat_adult")
 
+    def test_adult_notice_has_blank_line_between_paragraphs(self) -> None:
+        self.assertIn("\n\n", h.ADULT_ENTER_TEXT)
+
+    async def test_stop_resets_adult_mode(self) -> None:
+        await h.handle_dating_find(PEER)
+        self.api.stop = AsyncMock(return_value=MagicMock(promo=False))
+        await h.handle_stop(PEER, "stop", True)
+        self.assertNotIn(PEER, h._search_modes)
+
+    async def test_normal_chat_survives_partner_left_race(self) -> None:
+        from app.api_client import NotChattingError
+
+        await h.handle_dating_find(PEER)
+        self.api.search.reset_mock()
+        self.api.phase.return_value = "chatting"
+        self.api.stop = AsyncMock(side_effect=NotChattingError("gone"))
+        await h.handle_normal_chat(PEER)
+        self.api.search.assert_awaited_once_with(PEER)
+        self.assertNotIn(PEER, h._search_modes)
+
     async def test_no_notice_without_premium(self) -> None:
         self.api.search.side_effect = NotPremiumError("Нужен премиум")
         await h.handle_dating_find(PEER)
